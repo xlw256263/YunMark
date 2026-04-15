@@ -1,0 +1,135 @@
+/**
+ * Vue Router 路由配置
+ * 定义应用的所有路由规则和守卫
+ */
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+
+/**
+ * 路由配置数组
+ */
+const routes: RouteRecordRaw[] = [
+  {
+    // 导航页（首页）- 公开访问
+    path: '/',
+    name: 'Home',
+    component: () => import('@/views/HomeView.vue'),
+    meta: { 
+      title: '云藏·智能收藏夹',
+      requiresAuth: false,
+    },
+  },
+  {
+    // 登录页
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/Login.vue'),
+    meta: { 
+      title: '登录',
+      requiresAuth: false,
+    },
+  },
+  {
+    // 我的收藏页 - 需要登录
+    path: '/my/bookmarks',
+    name: 'Bookmarks',
+    component: () => import('@/views/BookmarkView.vue'),
+    meta: { 
+      title: '我的收藏',
+      requiresAuth: true,
+    },
+  },
+  {
+    // 官方分享页 - 公开访问
+    path: '/official',
+    name: 'Official',
+    component: () => import('@/views/OfficialView.vue'),
+    meta: { 
+      title: '官方分享',
+      requiresAuth: false,
+    },
+  },
+  {
+    // 统计页面 - 需要登录
+    path: '/stats',
+    name: 'Stats',
+    component: () => import('@/views/StatsView.vue'),
+    meta: { 
+      title: '数据统计',
+      requiresAuth: true,
+    },
+  },
+  {
+    // 个人中心 - 需要登录
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('@/views/ProfileView.vue'),
+    meta: { 
+      title: '个人中心',
+      requiresAuth: true,
+    },
+  },
+  {
+    // 403 无权限页面
+    path: '/403',
+    name: 'Forbidden',
+    component: () => import('@/views/Forbidden.vue'),
+    meta: { title: '无权限访问' },
+  },
+  {
+    // 404 页面不存在
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/views/NotFound.vue'),
+    meta: { title: '页面不存在' },
+  },
+]
+
+/**
+ * 创建路由实例
+ */
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+  // 滚动行为：切换路由时滚动到顶部
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { top: 0 }
+    }
+  },
+})
+
+/**
+ * 全局前置路由守卫
+ * 用于权限控制和页面标题设置
+ */
+router.beforeEach((to, from, next) => {
+  // 获取用户 Store
+  const userStore = useUserStore()
+  
+  // 设置页面标题
+  document.title = to.meta.title ? `${to.meta.title} - 云藏` : '云藏·智能收藏夹'
+  
+  // 检查是否需要登录
+  if (to.meta.requiresAuth && !userStore.isLoggedIn) {
+    // 未登录，跳转到登录页，并记录目标路径以便登录后返回
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath },
+    })
+    return
+  }
+  
+  // 如果已登录且访问登录页，重定向到首页
+  if (to.path === '/login' && userStore.isLoggedIn) {
+    next('/')
+    return
+  }
+  
+  // 允许导航
+  next()
+})
+
+export default router

@@ -1,0 +1,36 @@
+# 教程文档
+教程/
+
+# 开发需求文档
+PRD_*.md
+API_接口对接文档.md
+deepseek_markdown_*.md
+
+# IDE 配置
+.idea/
+.vscode/
+*.iml
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# Node.js 相关
+node_modules/
+dist/
+.env.local
+.env.*.local
+
+# Python 相关
+__pycache__/
+*.pyc
+.env
+*.egg-info/
+
+# Docker 相关（如果需要上传则删除此行）
+.dockerignore
+
+# 临时文件
+*.log
+*.tmp
+*.swp
