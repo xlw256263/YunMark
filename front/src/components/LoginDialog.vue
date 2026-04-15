@@ -149,6 +149,7 @@ import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { Close } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import { login, register } from '@/api/auth'
+import { getCurrentUser } from '@/api/user'
 import type { AxiosError } from 'axios'
 
 const router = useRouter()
@@ -260,15 +261,15 @@ const handleLogin = async () => {
 
       console.log('登录响应:', response)
 
-      // 构造用户信息对象（从登录响应中获取）
-      const userInfo = {
-        id: 0, // 登录接口不返回 ID，后续可通过 /users/me 获取
-        username: response.username,
-        email: response.email,
-        is_active: 1,
-      }
+      // 先保存 token
+      localStorage.setItem('access_token', response.access_token)
 
-      // 先保存 token 到 localStorage 和 Store
+      // 获取完整的用户信息（包含 role）
+      const userInfo = await getCurrentUser()
+
+      console.log('用户信息:', userInfo)
+
+      // 保存用户信息到 Store
       userStore.setUserInfo(response.access_token, userInfo)
 
       console.log('Token 已保存:', response.access_token)

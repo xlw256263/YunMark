@@ -34,6 +34,14 @@
                   <el-icon><User /></el-icon>
                   个人中心
                 </el-dropdown-item>
+                <el-dropdown-item
+                  v-if="userStore.isAdmin"
+                  divided
+                  command="admin"
+                >
+                  <el-icon><Setting /></el-icon>
+                  管理员后台
+                </el-dropdown-item>
                 <el-dropdown-item divided command="logout">
                   <el-icon><SwitchButton /></el-icon>
                   退出登录
@@ -71,6 +79,7 @@ import {
   ArrowDown,
   User,
   SwitchButton,
+  Setting,
 } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import LoginDialog from '@/components/LoginDialog.vue'
@@ -115,6 +124,9 @@ const handleCommand = (command: string) => {
       break
     case 'profile':
       router.push('/profile')
+      break
+    case 'admin':
+      router.push('/admin/tags')
       break
     case 'logout':
       handleLogout()

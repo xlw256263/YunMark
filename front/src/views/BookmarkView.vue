@@ -63,7 +63,7 @@
           </div>
           <div class="tag-cloud">
             <el-tag
-              v-for="tag in bookmarkStore.tags"
+              v-for="tag in usedTags"
               :key="tag.id"
               :type="selectedTagIds.includes(tag.id) ? 'primary' : 'info'"
               class="tag-item"
@@ -91,66 +91,89 @@
           <el-button type="primary" @click="showAddDialog">添加书签</el-button>
         </el-empty>
 
-        <!-- 书签卡片网格 -->
-        <div v-else class="bookmark-grid">
-          <el-card
+        <!-- 书签列表容器 -->
+        <div v-else class="bookmark-list">
+          <div
             v-for="bookmark in bookmarkStore.bookmarks"
             :key="bookmark.id"
-            class="bookmark-card"
-            shadow="hover"
+            class="bookmark-item"
           >
-            <!-- 卡片头部 -->
-            <div class="card-header">
-              <div class="card-title-row">
-                <el-avatar
-                  :size="24"
-                  :src="bookmark.favicon || `https://www.google.com/s2/favicons?domain=${getDomain(bookmark.url)}&sz=64`"
-                  class="favicon"
+            <!-- 主信息区域 -->
+            <div class="item-main" @click="handleBookmarkClick(bookmark)">
+              <div class="favicon-wrapper">
+                <img
+                  v-if="getFaviconUrl(bookmark)"
+                  :src="getFaviconUrl(bookmark)"
+                  :alt="bookmark.title"
+                  class="favicon-img"
                 />
-                <h3 class="card-title" :title="bookmark.title">{{ bookmark.title }}</h3>
+                <div v-else class="favicon-default">
+                  <span class="favicon-letter">{{ getFirstLetter(bookmark.title) }}</span>
+                </div>
               </div>
-              <el-dropdown trigger="click" class="card-actions">
-                <el-icon><More /></el-icon>
+              <div class="item-info">
+                <h3 class="item-title" :title="bookmark.title">{{ bookmark.title }}</h3>
+                <p class="item-description" :title="bookmark.description || '暂无描述'">
+                  {{ bookmark.description || '暂无描述' }}
+                </p>
+                <div class="item-meta">
+                  <span class="item-category" v-if="bookmark.category">
+                    <el-icon><Folder /></el-icon>
+                    {{ bookmark.category.name }}
+                  </span>
+                  <span class="item-clicks">
+                    <el-icon><View /></el-icon>
+                    {{ bookmark.click_count }} 次访问
+                  </span>
+                  <!-- 标签 - 在访问次数后面 -->
+                  <div class="item-tags">
+                    <el-tag
+                      v-for="tag in bookmark.tags"
+                      :key="tag.id"
+                      size="small"
+                      type="info"
+                      class="item-tag"
+                    >
+                      {{ tag.name }}
+                    </el-tag>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 操作按钮区域 -->
+            <div class="item-actions" @click.stop>
+              <el-button
+                type="success"
+                size="default"
+                plain
+                class="action-btn"
+                @click="handleCopyUrl(bookmark)"
+              >
+                <el-icon><CopyDocument /></el-icon>
+                复制
+              </el-button>
+              <el-button
+                type="primary"
+                size="default"
+                plain
+                class="action-btn"
+                @click="handleBookmarkClick(bookmark)"
+              >
+                <el-icon><Link /></el-icon>
+                打开
+              </el-button>
+              <el-dropdown trigger="click">
+                <el-button type="default" size="default" :icon="More" circle class="more-btn" />
                 <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item :icon="Edit" @click="handleEdit(bookmark)">编辑</el-dropdown-item>
-                    <el-dropdown-item :icon="Delete" @click="handleDelete(bookmark)">删除</el-dropdown-item>
+                    <el-dropdown-item :icon="Delete" @click="handleDelete(bookmark)" class="delete-item">删除</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
             </div>
-
-            <!-- 卡片内容 -->
-            <div class="card-body">
-              <p class="card-description" :title="bookmark.description || '暂无描述'">
-                {{ bookmark.description || '暂无描述' }}
-              </p>
-            </div>
-
-            <!-- 卡片底部 -->
-            <div class="card-footer">
-              <div class="card-tags">
-                <el-tag
-                  v-for="tag in bookmark.tags"
-                  :key="tag.id"
-                  size="small"
-                  type="info"
-                  class="card-tag"
-                >
-                  {{ tag.name }}
-                </el-tag>
-              </div>
-              <div class="card-meta">
-                <span class="click-count">
-                  <el-icon><View /></el-icon>
-                  {{ bookmark.click_count }}
-                </span>
-                <span class="card-category" v-if="bookmark.category">
-                  {{ bookmark.category.name }}
-                </span>
-              </div>
-            </div>
-          </el-card>
+          </div>
         </div>
 
         <!-- 分页 -->
@@ -197,7 +220,7 @@
           />
         </el-form-item>
         <el-form-item label="分类">
-          <el-select v-model="bookmarkForm.category_id" placeholder="选择分类" clearable style="width: 100%">
+          <el-select v-model="bookmarkForm.category_id" placeholder="选择分类" clearable style="width: 100%" @change="handleCategoryChange">
             <el-option
               v-for="cat in bookmarkStore.categories"
               :key="cat.id"
@@ -207,20 +230,18 @@
           </el-select>
         </el-form-item>
         <el-form-item label="标签">
-          <el-select
+          <el-cascader
             v-model="bookmarkForm.tag_ids"
-            multiple
+            :options="tagCategoryOptions"
+            :props="cascaderProps"
             placeholder="选择标签"
+            clearable
+            multiple
+            filterable
             style="width: 100%"
-          >
-            <el-option
-              v-for="tag in bookmarkStore.tags"
-              :key="tag.id"
-              :label="tag.name"
-              :value="tag.id"
-            />
-          </el-select>
+          />
         </el-form-item>
+
       </el-form>
       <template #footer>
         <el-button @click="bookmarkDialogVisible = false">取消</el-button>
@@ -257,17 +278,68 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
-  Search, Plus, Collection, Folder, More, Edit, Delete, View, Loading,
+  Search, Plus, Collection, Folder, More, Edit, Delete, View, Loading, CopyDocument, Link,
   type FormInstance, type FormRules
 } from '@element-plus/icons-vue'
 import { useBookmarkStore } from '@/stores/bookmark'
-import type { Bookmark, BookmarkCreate, CategoryCreate } from '@/types'
+import { getAdminTagCategories } from '@/api/admin'
+import { getFaviconWithCache, getDomain, getCachedFavicon } from '@/utils/favicon'
+import type { Bookmark, BookmarkCreate, CategoryCreate, Tag, TagCategory } from '@/types'
 
 // ==================== Store ====================
 const bookmarkStore = useBookmarkStore()
+
+// ==================== Favicon 缓存 ====================
+const faviconCache = ref<Map<number, string>>(new Map())
+
+/**
+ * 获取书签的 Favicon URL
+ * 优先使用缓存，未缓存时异步加载
+ */
+const getFaviconUrl = (bookmark: Bookmark): string => {
+  // 1. 检查内存缓存
+  const cached = faviconCache.value.get(bookmark.id)
+  if (cached) return cached
+
+  // 2. 检查 localStorage 缓存
+  const domain = getDomain(bookmark.url)
+  const localStorageCache = getCachedFavicon(domain)
+  if (localStorageCache) {
+    faviconCache.value.set(bookmark.id, localStorageCache)
+    return localStorageCache
+  }
+
+  // 3. 异步加载并缓存
+  getFaviconWithCache(
+    bookmark.url,
+    (faviconUrl) => {
+      faviconCache.value.set(bookmark.id, faviconUrl)
+    },
+    () => {
+      // 加载失败，设置空字符串
+      faviconCache.value.set(bookmark.id, '')
+    }
+  )
+
+  return ''
+}
+
+/**
+ * 获取标题首字母（用于默认图标）
+ */
+const getFirstLetter = (title: string): string => {
+  if (!title) return '?'
+  // 如果是中文，返回第一个字符
+  const firstChar = title.trim().charAt(0)
+  if (/[\u4e00-\u9fa5]/.test(firstChar)) {
+    return firstChar
+  }
+  // 英文返回大写首字母
+  return firstChar.toUpperCase()
+}
 
 // ==================== 搜索 ====================
 const searchQuery = ref('')
@@ -288,6 +360,19 @@ const handleCategoryClick = (categoryId: number | null) => {
 
 // ==================== 标签筛选 ====================
 const selectedTagIds = ref<number[]>([])
+
+// 计算用户实际用到的标签
+const usedTags = computed(() => {
+  const tagMap = new Map<number, Tag>()
+  bookmarkStore.bookmarks.forEach(bookmark => {
+    bookmark.tags.forEach(tag => {
+      if (!tagMap.has(tag.id)) {
+        tagMap.set(tag.id, tag)
+      }
+    })
+  })
+  return Array.from(tagMap.values())
+})
 
 const handleTagClick = (tagId: number) => {
   const index = selectedTagIds.value.indexOf(tagId)
@@ -310,6 +395,31 @@ const fetchBookmarks = () => {
   })
 }
 
+// ==================== 点击书签跳转 ====================
+const handleBookmarkClick = (bookmark: Bookmark) => {
+  // 新标签页打开
+  window.open(bookmark.url, '_blank')
+  // 增加点击次数
+  bookmarkStore.incrementClickCount(bookmark.id)
+}
+
+// ==================== 复制书签链接 ====================
+const handleCopyUrl = async (bookmark: Bookmark) => {
+  try {
+    await navigator.clipboard.writeText(bookmark.url)
+    ElMessage.success('链接已复制到剪贴板')
+  } catch {
+    // 降级方案
+    const input = document.createElement('input')
+    input.value = bookmark.url
+    document.body.appendChild(input)
+    input.select()
+    document.execCommand('copy')
+    document.body.removeChild(input)
+    ElMessage.success('链接已复制到剪贴板')
+  }
+}
+
 // ==================== 添加/编辑书签 ====================
 const bookmarkDialogVisible = ref(false)
 const editingBookmark = ref<Bookmark | null>(null)
@@ -322,6 +432,7 @@ const bookmarkForm = ref<BookmarkCreate>({
   tag_ids: [],
 })
 
+// 表单验证规则
 const bookmarkRules: FormRules = {
   url: [
     { required: true, message: '请输入网址', trigger: 'blur' },
@@ -332,6 +443,34 @@ const bookmarkRules: FormRules = {
   ],
 }
 
+// 标签分类数据
+const tagCategories = ref<TagCategory[]>([])
+
+// 级联选择器配置
+const cascaderProps = {
+  multiple: true,
+  checkStrictly: true,
+  emitPath: false,
+  expandTrigger: 'hover' as const,
+}
+
+// 构建级联选择器选项
+const tagCategoryOptions = computed(() => {
+  if (!tagCategories.value.length) return []
+
+  return tagCategories.value.map(cat => ({
+    value: `cat_${cat.id}`,
+    label: cat.name,
+    disabled: true,
+    children: bookmarkStore.tags
+      .filter(tag => tag.category_id === cat.id)
+      .map(tag => ({
+        value: tag.id,
+        label: tag.name
+      }))
+  }))
+})
+
 const showAddDialog = () => {
   editingBookmark.value = null
   bookmarkForm.value = {
@@ -341,6 +480,7 @@ const showAddDialog = () => {
     category_id: undefined,
     tag_ids: [],
   }
+  loadTagCategories()
   bookmarkDialogVisible.value = true
 }
 
@@ -353,7 +493,17 @@ const handleEdit = (bookmark: Bookmark) => {
     category_id: bookmark.category?.id,
     tag_ids: bookmark.tags.map(t => t.id),
   }
+  loadTagCategories()
   bookmarkDialogVisible.value = true
+}
+
+// 加载标签分类
+const loadTagCategories = async () => {
+  try {
+    tagCategories.value = await getAdminTagCategories()
+  } catch (error) {
+    console.error('加载标签分类失败', error)
+  }
 }
 
 const handleSaveBookmark = async () => {
@@ -363,13 +513,23 @@ const handleSaveBookmark = async () => {
     if (!valid) return
 
     try {
+      // 过滤掉分类 ID（只保留标签 ID）
+      const tagOnlyIds = bookmarkForm.value.tag_ids?.filter(id =>
+        !String(id).startsWith('cat_')
+      ) || []
+
+      const submitData = {
+        ...bookmarkForm.value,
+        tag_ids: tagOnlyIds
+      }
+
       if (editingBookmark.value) {
         // 编辑模式
-        await bookmarkStore.updateBookmark(editingBookmark.value.id, bookmarkForm.value)
+        await bookmarkStore.updateBookmark(editingBookmark.value.id, submitData)
         ElMessage.success('更新成功')
       } else {
         // 新增模式
-        await bookmarkStore.createBookmark(bookmarkForm.value)
+        await bookmarkStore.createBookmark(submitData)
         ElMessage.success('添加成功')
       }
       bookmarkDialogVisible.value = false
@@ -403,15 +563,6 @@ const handleDelete = (bookmark: Bookmark) => {
     .catch(() => {
       // 取消删除
     })
-}
-
-// ==================== 获取域名（用于 favicon）====================
-const getDomain = (url: string) => {
-  try {
-    return new URL(url).hostname
-  } catch {
-    return ''
-  }
 }
 
 // ==================== 添加分类 ====================
@@ -453,9 +604,12 @@ const handleSaveCategory = async () => {
 onMounted(async () => {
   // 初始化分类和标签
   await bookmarkStore.init()
+  // 加载标签分类
+  await loadTagCategories()
   // 加载书签列表
   fetchBookmarks()
 })
+
 </script>
 
 <style scoped>
@@ -613,111 +767,195 @@ onMounted(async () => {
 /* ========== 右侧书签列表 ========== */
 .bookmark-main {
   flex: 1;
-  padding: 24px 32px;
+  padding: 20px 32px;
   overflow-y: auto;
 }
 
-/* 书签卡片网格 */
-.bookmark-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
+/* 书签列表容器 */
+.bookmark-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.bookmark-card {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.2s;
+/* 书签列表项 */
+.bookmark-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  transition: all 0.25s ease;
+}
+
+.bookmark-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(129, 140, 248, 0.3);
+  transform: translateX(4px);
+}
+
+/* 主信息区域 */
+.item-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
   cursor: pointer;
 }
 
-.bookmark-card:hover {
-  border-color: rgba(99, 102, 241, 0.4);
-  transform: translateY(-2px);
+.item-main:hover .item-title {
+  color: #818cf8;
 }
 
-/* 卡片头部 */
-.card-header {
+.favicon-wrapper {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
+  justify-content: center;
 }
 
-.card-title-row {
+.favicon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.favicon-default {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.favicon-letter {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 信息区域 */
+.item-info {
   flex: 1;
   min-width: 0;
 }
 
-.favicon {
-  flex-shrink: 0;
-}
-
-.card-title {
-  font-size: 15px;
-  font-weight: 500;
+.item-title {
+  font-size: 16px;
+  font-weight: 600;
   color: #e2e8f0;
-  margin: 0;
+  margin: 0 0 4px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: color 0.2s;
 }
 
-.card-actions {
-  color: #94a3b8;
-  cursor: pointer;
-}
-
-/* 卡片内容 */
-.card-body {
-  margin-bottom: 12px;
-}
-
-.card-description {
+.item-description {
   font-size: 13px;
   color: #94a3b8;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  margin: 0 0 6px 0;
+  white-space: nowrap;
   overflow: hidden;
-  line-height: 1.5;
+  text-overflow: ellipsis;
+  line-height: 1.4;
 }
 
-/* 卡片底部 */
-.card-footer {
+/* 元信息区域 */
+.item-meta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.card-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.card-tag {
-  font-size: 11px;
-}
-
-.card-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  gap: 16px;
   font-size: 12px;
   color: #64748b;
+  flex-wrap: wrap;
 }
 
-.click-count {
+.item-category,
+.item-clicks {
   display: flex;
   align-items: center;
   gap: 4px;
+  white-space: nowrap;
+}
+
+.item-category .el-icon,
+.item-clicks .el-icon {
+  font-size: 14px;
+}
+
+/* 标签区域 - 在元信息内 */
+.item-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.item-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+}
+
+/* 操作按钮区域 */
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.action-btn {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 16px;
+  height: 32px;
+  border-radius: 6px;
+}
+
+.action-btn .el-icon {
+  margin-right: 4px;
+}
+
+.action-btn[type="success"] {
+  border-color: #67c23a;
+  color: #67c23a;
+}
+
+.action-btn[type="success"]:hover {
+  background: #67c23a;
+  color: white;
+}
+
+.action-btn[type="primary"] {
+  border-color: #409eff;
+  color: #409eff;
+}
+
+.action-btn[type="primary"]:hover {
+  background: #409eff;
+  color: white;
+}
+
+.more-btn {
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+}
+
+.delete-item {
+  color: #f56c6c;
 }
 
 /* 分页 */
@@ -742,5 +980,72 @@ onMounted(async () => {
   .bookmark-grid {
     grid-template-columns: 1fr;
   }
+}
+</style>
+
+<style>
+/* 级联选择器输入框样式 */
+.el-cascader .el-input__wrapper {
+  box-shadow: none !important;
+  border: 1px solid #dcdfe6;
+}
+
+.el-cascader .el-input__wrapper:hover {
+  border-color: #c0c4cc;
+}
+
+.el-cascader.is-focus .el-input__wrapper {
+  border-color: #409eff;
+  box-shadow: 0 0 0 1px #409eff inset !important;
+}
+
+/* 隐藏级联选择器面板中的复选框 */
+.el-cascader-panel .el-checkbox {
+  display: none !important;
+}
+
+/* 选中的子标签高亮显示 */
+.el-cascader-panel .el-cascader-node.is-active {
+  color: #409eff;
+  font-weight: 600;
+}
+
+/* 确保选中节点有背景色 */
+.el-cascader-panel .el-cascader-node.is-active {
+  background-color: #ecf5ff;
+}
+
+/* 鼠标悬停效果 */
+.el-cascader-panel .el-cascader-node:hover {
+  background-color: #f5f7fa;
+}
+
+/* 禁用一级分类节点的高亮 */
+.el-cascader-panel .el-cascader-node[aria-level="1"].is-active {
+  color: inherit;
+  font-weight: normal;
+  background-color: transparent;
+}
+
+.el-cascader-panel .el-cascader-node__postfix {
+  margin-right: 10px;
+}
+
+/* 弹窗内的表单样式 */
+.bookmark-dialog .el-form-item__label {
+  font-weight: 500;
+}
+
+.bookmark-dialog .el-input__wrapper,
+.bookmark-dialog .el-textarea__inner,
+.bookmark-dialog .el-select .el-input__wrapper {
+  box-shadow: none !important;
+  border: 1px solid #dcdfe6;
+}
+
+.bookmark-dialog .el-input__wrapper:hover,
+.bookmark-dialog .el-textarea__inner:hover,
+.bookmark-dialog .el-select .el-input__wrapper:hover {
+  border-color: #c0c4cc;
 }
 </style>

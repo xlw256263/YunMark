@@ -61,5 +61,5 @@ export const deleteBookmark = (id: number) => {
  * @param id - 书签ID
  */
 export const incrementClickCount = (id: number) => {
-  return request.put<{ id: number; click_count: number }>(`/bookmarks/${id}/click`)
+  return request.patch<{ id: number; click_count: number }>(`/bookmarks/${id}/click`)
 }

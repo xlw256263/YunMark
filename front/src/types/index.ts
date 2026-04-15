@@ -204,6 +204,44 @@ export interface CategoryUpdate {
 // ==================== 标签相关类型 ====================
 
 /**
+ * 标签分类信息
+ * 对应后端 TagCategoryResponse schema
+ */
+export interface TagCategory {
+  /** 分类ID */
+  id: number
+  /** 分类名称 */
+  name: string
+  /** 分类描述 */
+  description?: string | null
+  /** 排序顺序 */
+  sort_order: number
+  /** 创建时间 */
+  created_at: string
+}
+
+/**
+ * 创建标签分类请求
+ */
+export interface TagCategoryCreate {
+  /** 分类名称 */
+  name: string
+  /** 分类描述 */
+  description?: string
+  /** 排序顺序 */
+  sort_order?: number
+}
+
+/**
+ * 更新标签分类请求
+ */
+export interface TagCategoryUpdate {
+  name?: string
+  description?: string
+  sort_order?: number
+}
+
+/**
  * 标签信息
  * 对应后端 TagResponse schema
  */
@@ -212,6 +250,12 @@ export interface Tag {
   id: number
   /** 标签名称 */
   name: string
+  /** 所属分类ID */
+  category_id?: number | null
+  /** 所属分类详情 */
+  category?: TagCategory | null
+  /** 使用次数统计（管理员接口返回） */
+  usage_count?: number
 }
 
 /**
@@ -221,6 +265,8 @@ export interface Tag {
 export interface TagCreate {
   /** 标签名称 */
   name: string
+  /** 所属分类ID（可选） */
+  category_id?: number | null
 }
 
 // ==================== 统计相关类型（待后端实现）====================

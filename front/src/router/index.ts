@@ -70,6 +70,38 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    // 管理员后台 - 需要管理员权限
+    path: '/admin',
+    component: () => import('@/layouts/AdminLayout.vue'),
+    meta: { 
+      title: '管理员后台',
+      requiresAuth: true,
+      requiresAdmin: true,
+    },
+    children: [
+      {
+        // 标签分类管理
+        path: 'tag-categories',
+        name: 'AdminTagCategories',
+        component: () => import('@/views/admin/TagCategoryAdminView.vue'),
+        meta: { 
+          title: '标签分类管理',
+          requiresAdmin: true,
+        },
+      },
+      {
+        // 标签管理
+        path: 'tags',
+        name: 'AdminTags',
+        component: () => import('@/views/admin/TagAdminView.vue'),
+        meta: { 
+          title: '标签管理',
+          requiresAdmin: true,
+        },
+      },
+    ],
+  },
+  {
     // 403 无权限页面
     path: '/403',
     name: 'Forbidden',
@@ -119,6 +151,13 @@ router.beforeEach((to, from, next) => {
       path: '/login',
       query: { redirect: to.fullPath },
     })
+    return
+  }
+  
+  // 检查是否需要管理员权限
+  if (to.meta.requiresAdmin && !userStore.isAdmin) {
+    // 非管理员，跳转到 403 页面
+    next('/403')
     return
   }
   

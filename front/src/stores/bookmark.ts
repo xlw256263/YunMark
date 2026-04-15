@@ -9,6 +9,7 @@ import {
   createBookmark as createBookmarkApi,
   updateBookmark as updateBookmarkApi,
   deleteBookmark as deleteBookmarkApi,
+  incrementClickCount as incrementClickCountApi,
 } from '@/api/bookmark'
 import { getCategories, createCategory as createCategoryApi } from '@/api/category'
 import { getTags } from '@/api/tag'
@@ -153,6 +154,28 @@ export const useBookmarkStore = defineStore('bookmark', () => {
     }
   }
 
+  // ==================== 点击统计操作方法 ====================
+
+  /**
+   * 增加书签点击次数
+   * @param id - 书签ID
+   */
+  async function incrementClickCount(id: number) {
+    try {
+      const response = await incrementClickCountApi(id)
+      
+      // 更新本地书签的点击次数
+      const bookmark = bookmarks.value.find(b => b.id === id)
+      if (bookmark) {
+        bookmark.click_count = response.click_count
+      }
+      
+      return response
+    } catch (error) {
+      console.error('增加点击次数失败:', error)
+    }
+  }
+
   // ==================== 分类操作方法 ====================
 
   /**
@@ -236,6 +259,7 @@ export const useBookmarkStore = defineStore('bookmark', () => {
     createBookmark,
     updateBookmark,
     deleteBookmark,
+    incrementClickCount,
 
     // 分类操作
     fetchCategories,
