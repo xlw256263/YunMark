@@ -1,9 +1,9 @@
 # 教程文档
-教程/
+文档/
 
 # 开发需求文档
 PRD_*.md
-API_接口对接文档.md
+文档/API_接口对接文档.md
 deepseek_markdown_*.md
 
 # IDE 配置
@@ -34,3 +34,4 @@ __pycache__/
 *.log
 *.tmp
 *.swp
+

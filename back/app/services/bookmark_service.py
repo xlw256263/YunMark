@@ -146,6 +146,11 @@ class BookmarkService:
         # 刷新对象以获取数据库生成的默认值（如ID, created_at等）
         db.refresh(db_bookmark)
 
+        # 更新标签使用计数
+        if bookmark_data.tag_ids:
+            AdminTagService.update_tag_usage_count_on_bookmark_create(db, bookmark_data.tag_ids)
+            db.refresh(db_bookmark)
+
         return BookmarkResponse.from_orm(db_bookmark)
 
     @staticmethod
@@ -172,6 +177,9 @@ class BookmarkService:
         """
         # 获取书签对象，若不存在则直接抛出异常
         bookmark = BookmarkService.get_bookmark_by_id(db, bookmark_id, user_id)
+
+        # 保存旧的标签ID列表
+        old_tag_ids = [tag.id for tag in bookmark.tags]
 
         # 获取已设置的更新字段字典，排除未设置的字段
         update_dict = update_data.dict(exclude_unset=True)
@@ -203,6 +211,11 @@ class BookmarkService:
         db.commit()
         db.refresh(bookmark)
 
+        # 更新标签使用计数
+        if tag_ids is not None:
+            AdminTagService.update_tag_usage_count_on_bookmark_update(db, old_tag_ids, tag_ids)
+            db.refresh(bookmark)
+
         return BookmarkResponse.from_orm(bookmark)
 
     @staticmethod
@@ -224,9 +237,17 @@ class BookmarkService:
         # 获取书签对象（同时验证权限）
         bookmark = BookmarkService.get_bookmark_by_id(db, bookmark_id, user_id)
         
+        # 保存标签ID列表（用于更新计数）
+        tag_ids = [tag.id for tag in bookmark.tags]
+        
         # 执行删除操作
         db.delete(bookmark)
         db.commit()
+        
+        # 更新标签使用计数
+        if tag_ids:
+            AdminTagService.update_tag_usage_count_on_bookmark_delete(db, tag_ids)
+        
         return True
 
     @staticmethod
@@ -472,3 +493,232 @@ class TagService:
         db.refresh(db_tag)
 
         return TagResponse.from_orm(db_tag)
+
+
+
+
+class AdminTagService:
+    """管理员标签服务类，提供标签的完整管理功能"""
+
+    @staticmethod
+    def get_all_tags_with_stats(db: Session) -> List[TagResponse]:
+        """
+        获取所有标签及其使用统计（按使用次数降序排列）
+
+        Args:
+            db: 数据库会话对象
+
+        Returns:
+            List[TagResponse]: 标签响应对象列表，包含使用次数
+        """
+        tags = db.query(Tag).order_by(Tag.usage_count.desc()).all()
+        return [TagResponse.model_validate(t) for t in tags]
+
+    @staticmethod
+    def create_tag(db: Session, tag_data: TagCreate) -> TagResponse:
+        """
+        管理员创建新标签
+
+        Args:
+            db: 数据库会话对象
+            tag_data: 包含标签名称和分类ID的Pydantic模型
+
+        Returns:
+            TagResponse: 创建的标签响应对象
+
+        Raises:
+            HTTPException: 如果标签名称已存在或分类不存在
+        """
+        from fastapi import HTTPException, status
+
+        # 检查标签是否已存在
+        existing_tag = db.query(Tag).filter(Tag.name == tag_data.name).first()
+        if existing_tag:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"标签 '{tag_data.name}' 已存在"
+            )
+
+        # 如果提供了分类ID，验证分类是否存在
+        if tag_data.category_id:
+            from app.models.tag_category import TagCategory
+            category = db.query(TagCategory).filter(TagCategory.id == tag_data.category_id).first()
+            if not category:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"标签分类 ID {tag_data.category_id} 不存在"
+                )
+
+        # 创建新标签
+        db_tag = Tag(
+            name=tag_data.name,
+            category_id=tag_data.category_id,
+            usage_count=0
+        )
+        db.add(db_tag)
+        db.commit()
+        db.refresh(db_tag)
+
+        return TagResponse.model_validate(db_tag)
+
+    @staticmethod
+    def update_tag(db: Session, tag_id: int, tag_name: str, category_id: Optional[int] = None) -> TagResponse:
+        """
+        管理员更新标签
+
+        Args:
+            db: 数据库会话对象
+            tag_id: 标签ID
+            tag_name: 新标签名称
+            category_id: 新分类ID（可选，None表示不更新分类）
+
+        Returns:
+            TagResponse: 更新后的标签响应对象
+
+        Raises:
+            NotFoundError: 如果标签不存在
+            HTTPException: 如果新名称与其他标签冲突或分类不存在
+        """
+        from fastapi import HTTPException, status
+
+        # 获取标签
+        tag = db.query(Tag).filter(Tag.id == tag_id).first()
+        if not tag:
+            raise NotFoundError("标签不存在")
+
+        # 检查新名称是否与其他标签冲突
+        existing_tag = db.query(Tag).filter(
+            Tag.name == tag_name,
+            Tag.id != tag_id
+        ).first()
+        if existing_tag:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"标签 '{tag_name}' 已存在"
+            )
+
+        # 如果提供了分类ID，验证分类是否存在
+        if category_id is not None:
+            from app.models.tag_category import TagCategory
+            if category_id:  # 如果 category_id 不为 0 或 None
+                category = db.query(TagCategory).filter(TagCategory.id == category_id).first()
+                if not category:
+                    raise HTTPException(
+                        status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"标签分类 ID {category_id} 不存在"
+                    )
+            tag.category_id = category_id
+
+        # 更新标签名称
+        tag.name = tag_name
+        db.commit()
+        db.refresh(tag)
+
+        return TagResponse.model_validate(tag)
+
+    @staticmethod
+    def delete_tag(db: Session, tag_id: int) -> bool:
+        """
+        管理员删除标签（严格模式：已使用的标签禁止删除）
+
+        Args:
+            db: 数据库会话对象
+            tag_id: 标签ID
+
+        Returns:
+            bool: 删除成功返回True
+
+        Raises:
+            NotFoundError: 如果标签不存在
+            HTTPException: 如果标签正在被使用
+        """
+        from fastapi import HTTPException, status
+
+        # 获取标签
+        tag = db.query(Tag).filter(Tag.id == tag_id).first()
+        if not tag:
+            raise NotFoundError("标签不存在")
+
+        # 检查标签是否被使用
+        if tag.usage_count > 0:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"标签 '{tag.name}' 正在被 {tag.usage_count} 个书签使用，无法删除"
+            )
+
+        # 删除标签
+        db.delete(tag)
+        db.commit()
+        return True
+
+    @staticmethod
+    def update_tag_usage_count_on_bookmark_create(db: Session, tag_ids: List[int]):
+        """
+        创建书签时更新标签使用次数（增加）
+
+        Args:
+            db: 数据库会话对象
+            tag_ids: 关联的标签ID列表
+        """
+        if not tag_ids:
+            return
+
+        db.query(Tag).filter(Tag.id.in_(tag_ids)).update(
+            {Tag.usage_count: Tag.usage_count + 1},
+            synchronize_session=False
+        )
+        db.commit()
+
+    @staticmethod
+    def update_tag_usage_count_on_bookmark_update(
+            db: Session,
+            old_tag_ids: List[int],
+            new_tag_ids: List[int]
+    ):
+        """
+        更新书签时更新标签使用次数（旧标签减1，新标签加1）
+
+        Args:
+            db: 数据库会话对象
+            old_tag_ids: 更新前的标签ID列表
+            new_tag_ids: 更新后的标签ID列表
+        """
+        old_set = set(old_tag_ids or [])
+        new_set = set(new_tag_ids or [])
+
+        # 需要减少计数的标签（在旧列表中但不在新列表中）
+        to_decrease = old_set - new_set
+        if to_decrease:
+            db.query(Tag).filter(Tag.id.in_(to_decrease)).update(
+                {Tag.usage_count: Tag.usage_count - 1},
+                synchronize_session=False
+            )
+
+        # 需要增加计数的标签（在新列表中但不在旧列表中）
+        to_increase = new_set - old_set
+        if to_increase:
+            db.query(Tag).filter(Tag.id.in_(to_increase)).update(
+                {Tag.usage_count: Tag.usage_count + 1},
+                synchronize_session=False
+            )
+
+        db.commit()
+
+    @staticmethod
+    def update_tag_usage_count_on_bookmark_delete(db: Session, tag_ids: List[int]):
+        """
+        删除书签时更新标签使用次数（减少）
+
+        Args:
+            db: 数据库会话对象
+            tag_ids: 关联的标签ID列表
+        """
+        if not tag_ids:
+            return
+
+        db.query(Tag).filter(Tag.id.in_(tag_ids)).update(
+            {Tag.usage_count: Tag.usage_count - 1},
+            synchronize_session=False
+        )
+        db.commit()
+

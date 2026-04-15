@@ -34,6 +34,7 @@ class UserResponse(UserBase):
     """用户响应模型（不包含密码）"""
     id: int
     is_active: int
+    role: str = 'user'
 
     class Config:
         from_attributes = True
@@ -42,7 +43,8 @@ class UserResponse(UserBase):
                 "id": 1,
                 "username": "john_doe",
                 "email": "john@example.com",
-                "is_active": 1
+                "is_active": 1,
+                "role": "user"
             }
         }
 

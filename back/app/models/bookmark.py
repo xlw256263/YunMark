@@ -51,6 +51,7 @@ class Tag(Base):
     
     用于给书签打标签，支持灵活的多维度分类。
     标签名称全局唯一，一个标签可以被多个书签使用，一个书签也可以有多个标签。
+    标签可以属于某个分类（由管理员设置）。
     """
     __tablename__ = "tags"
 
@@ -59,15 +60,24 @@ class Tag(Base):
     
     # 标签名称，最大长度50字符，全局唯一，不能为空，建立索引以加速查找
     name = Column(String(50), unique=True, nullable=False, index=True, comment='标签名称')
+    
+    # 所属分类ID，外键关联 tag_categories 表，可为空（允许无分类），建立索引
+    category_id = Column(Integer, ForeignKey('tag_categories.id'), nullable=True, index=True, comment='所属分类ID')
+    
+    # 使用次数统计缓存，默认为0，在书签增删改时同步更新
+    usage_count = Column(Integer, default=0, nullable=False, comment='使用次数统计')
 
     # 关系定义
     # 与 Bookmark 的多对多关系：通过 bookmark_tag 关联表实现
     # secondary 参数指定了关联表，back_populates 确保双向同步
     bookmarks = relationship("Bookmark", secondary=bookmark_tag, back_populates="tags")
+    
+    # 与 TagCategory 的多对一关系：一个标签属于一个分类（可选）
+    category = relationship("TagCategory", back_populates="tags")
 
     def __repr__(self):
         """返回标签对象的字符串表示，便于调试和日志记录"""
-        return f"<Tag(id={self.id}, name='{self.name}')>"
+        return f"<Tag(id={self.id}, name='{self.name}', category_id={self.category_id}, usage_count={self.usage_count})>"
 
 
 class Bookmark(Base):

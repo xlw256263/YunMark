@@ -1,0 +1,542 @@
+- generic [ref=e3]:
+  - generic:
+    - img
+  - generic [ref=e4]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - heading "私人精品网页推荐系统 1.0.0 OAS 3.1" [level=1] [ref=e9]:
+          - text: 私人精品网页推荐系统
+          - generic [ref=e10]:
+            - generic [ref=e12]: 1.0.0
+            - generic [ref=e14]: OAS 3.1
+        - link "/openapi.json" [ref=e15] [cursor=pointer]:
+          - /url: /openapi.json
+          - generic [ref=e16]: /openapi.json
+      - paragraph [ref=e19]: 私人精品网页推荐系统 API
+    - button "Authorize" [ref=e23] [cursor=pointer]:
+      - generic [ref=e24]: Authorize
+      - img [ref=e25]
+    - generic [ref=e29]:
+      - generic [ref=e31]:
+        - heading "认证 Collapse operation" [level=3] [ref=e32] [cursor=pointer]:
+          - link "认证" [ref=e33]:
+            - /url: "#/认证"
+          - button "Collapse operation" [expanded] [ref=e34]:
+            - img [ref=e35]
+        - generic [ref=e38]:
+          - generic [ref=e41] [cursor=pointer]:
+            - button "POST /api/v1/auth/token 用户登录获取Token" [ref=e42]:
+              - generic [ref=e43]: POST
+              - generic [ref=e44]:
+                - link "/api/v1/auth/token" [ref=e46]:
+                  - /url: "#/认证/login_for_access_token_api_v1_auth_token_post"
+                  - generic [ref=e47]:
+                    - text: /api
+                    - text: /v1
+                    - text: /auth
+                    - text: /token
+                - generic [ref=e48]: 用户登录获取Token
+            - generic "Copy to clipboard"
+            - button "post /api/v1/auth/token" [ref=e51]:
+              - img [ref=e52]
+          - generic [ref=e56] [cursor=pointer]:
+            - button "POST /api/v1/auth/register 用户注册" [ref=e57]:
+              - generic [ref=e58]: POST
+              - generic [ref=e59]:
+                - link "/api/v1/auth/register" [ref=e61]:
+                  - /url: "#/认证/register_api_v1_auth_register_post"
+                  - generic [ref=e62]:
+                    - text: /api
+                    - text: /v1
+                    - text: /auth
+                    - text: /register
+                - generic [ref=e63]: 用户注册
+            - generic "Copy to clipboard"
+            - button "post /api/v1/auth/register" [ref=e66]:
+              - img [ref=e67]
+      - generic [ref=e70]:
+        - heading "用户 Collapse operation" [level=3] [ref=e71] [cursor=pointer]:
+          - link "用户" [ref=e72]:
+            - /url: "#/用户"
+          - button "Collapse operation" [expanded] [ref=e73]:
+            - img [ref=e74]
+        - generic [ref=e77]:
+          - generic [ref=e80] [cursor=pointer]:
+            - button "GET /api/v1/users/me 获取当前用户信息" [ref=e81]:
+              - generic [ref=e82]: GET
+              - generic [ref=e83]:
+                - link "/api/v1/users/me" [ref=e85]:
+                  - /url: "#/用户/read_users_me_api_v1_users_me_get"
+                  - generic [ref=e86]:
+                    - text: /api
+                    - text: /v1
+                    - text: /users
+                    - text: /me
+                - generic [ref=e87]: 获取当前用户信息
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e90]:
+              - img [ref=e91]
+            - button "get /api/v1/users/me" [ref=e93]:
+              - img [ref=e94]
+          - generic [ref=e98] [cursor=pointer]:
+            - button "PUT /api/v1/users/me 更新当前用户信息" [ref=e99]:
+              - generic [ref=e100]: PUT
+              - generic [ref=e101]:
+                - link "/api/v1/users/me" [ref=e103]:
+                  - /url: "#/用户/update_user_me_api_v1_users_me_put"
+                  - generic [ref=e104]:
+                    - text: /api
+                    - text: /v1
+                    - text: /users
+                    - text: /me
+                - generic [ref=e105]: 更新当前用户信息
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e108]:
+              - img [ref=e109]
+            - button "put /api/v1/users/me" [ref=e111]:
+              - img [ref=e112]
+          - generic [ref=e116] [cursor=pointer]:
+            - button "DELETE /api/v1/users/me 删除当前用户账户" [ref=e117]:
+              - generic [ref=e118]: DELETE
+              - generic [ref=e119]:
+                - link "/api/v1/users/me" [ref=e121]:
+                  - /url: "#/用户/delete_user_me_api_v1_users_me_delete"
+                  - generic [ref=e122]:
+                    - text: /api
+                    - text: /v1
+                    - text: /users
+                    - text: /me
+                - generic [ref=e123]: 删除当前用户账户
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e126]:
+              - img [ref=e127]
+            - button "delete /api/v1/users/me" [ref=e129]:
+              - img [ref=e130]
+      - generic [ref=e133]:
+        - heading "收藏夹 Collapse operation" [level=3] [ref=e134] [cursor=pointer]:
+          - link "收藏夹" [ref=e135]:
+            - /url: "#/收藏夹"
+          - button "Collapse operation" [expanded] [ref=e136]:
+            - img [ref=e137]
+        - generic [ref=e140]:
+          - generic [ref=e143] [cursor=pointer]:
+            - button "GET /api/v1/bookmarks 获取书签列表" [ref=e144]:
+              - generic [ref=e145]: GET
+              - generic [ref=e146]:
+                - link "/api/v1/bookmarks" [ref=e148]:
+                  - /url: "#/收藏夹/list_bookmarks_api_v1_bookmarks_get"
+                  - generic [ref=e149]:
+                    - text: /api
+                    - text: /v1
+                    - text: /bookmarks
+                - generic [ref=e150]: 获取书签列表
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e153]:
+              - img [ref=e154]
+            - button "get /api/v1/bookmarks" [ref=e156]:
+              - img [ref=e157]
+          - generic [ref=e161] [cursor=pointer]:
+            - button "POST /api/v1/bookmarks 创建书签" [ref=e162]:
+              - generic [ref=e163]: POST
+              - generic [ref=e164]:
+                - link "/api/v1/bookmarks" [ref=e166]:
+                  - /url: "#/收藏夹/create_bookmark_api_v1_bookmarks_post"
+                  - generic [ref=e167]:
+                    - text: /api
+                    - text: /v1
+                    - text: /bookmarks
+                - generic [ref=e168]: 创建书签
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e171]:
+              - img [ref=e172]
+            - button "post /api/v1/bookmarks" [ref=e174]:
+              - img [ref=e175]
+          - generic [ref=e179] [cursor=pointer]:
+            - 'button "GET /api/v1/bookmarks/{bookmark_id} 获取单个书签" [ref=e180]':
+              - generic [ref=e181]: GET
+              - generic [ref=e182]:
+                - 'link "/api/v1/bookmarks/{bookmark_id}" [ref=e184]':
+                  - /url: "#/收藏夹/get_bookmark_api_v1_bookmarks__bookmark_id__get"
+                  - generic [ref=e185]:
+                    - text: /api
+                    - text: /v1
+                    - text: /bookmarks
+                    - text: "/{bookmark_id}"
+                - generic [ref=e186]: 获取单个书签
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e189]:
+              - img [ref=e190]
+            - 'button "get /api/v1/bookmarks/{bookmark_id}" [ref=e192]':
+              - img [ref=e193]
+          - generic [ref=e197] [cursor=pointer]:
+            - 'button "PUT /api/v1/bookmarks/{bookmark_id} 更新书签" [ref=e198]':
+              - generic [ref=e199]: PUT
+              - generic [ref=e200]:
+                - 'link "/api/v1/bookmarks/{bookmark_id}" [ref=e202]':
+                  - /url: "#/收藏夹/update_bookmark_api_v1_bookmarks__bookmark_id__put"
+                  - generic [ref=e203]:
+                    - text: /api
+                    - text: /v1
+                    - text: /bookmarks
+                    - text: "/{bookmark_id}"
+                - generic [ref=e204]: 更新书签
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e207]:
+              - img [ref=e208]
+            - 'button "put /api/v1/bookmarks/{bookmark_id}" [ref=e210]':
+              - img [ref=e211]
+          - generic [ref=e215] [cursor=pointer]:
+            - 'button "DELETE /api/v1/bookmarks/{bookmark_id} 删除书签" [ref=e216]':
+              - generic [ref=e217]: DELETE
+              - generic [ref=e218]:
+                - 'link "/api/v1/bookmarks/{bookmark_id}" [ref=e220]':
+                  - /url: "#/收藏夹/delete_bookmark_api_v1_bookmarks__bookmark_id__delete"
+                  - generic [ref=e221]:
+                    - text: /api
+                    - text: /v1
+                    - text: /bookmarks
+                    - text: "/{bookmark_id}"
+                - generic [ref=e222]: 删除书签
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e225]:
+              - img [ref=e226]
+            - 'button "delete /api/v1/bookmarks/{bookmark_id}" [ref=e228]':
+              - img [ref=e229]
+          - generic [ref=e233] [cursor=pointer]:
+            - 'button "PATCH /api/v1/bookmarks/{bookmark_id}/click 增加点击次数" [ref=e234]':
+              - generic [ref=e235]: PATCH
+              - generic [ref=e236]:
+                - 'link "/api/v1/bookmarks/{bookmark_id}/click" [ref=e238]':
+                  - /url: "#/收藏夹/increment_click_count_api_v1_bookmarks__bookmark_id__click_patch"
+                  - generic [ref=e239]:
+                    - text: /api
+                    - text: /v1
+                    - text: /bookmarks
+                    - text: "/{bookmark_id}"
+                    - text: /click
+                - generic [ref=e240]: 增加点击次数
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e243]:
+              - img [ref=e244]
+            - 'button "patch /api/v1/bookmarks/{bookmark_id}/click" [ref=e246]':
+              - img [ref=e247]
+          - generic [ref=e251] [cursor=pointer]:
+            - button "GET /api/v1/bookmarks/categories/list 获取分类列表" [ref=e252]:
+              - generic [ref=e253]: GET
+              - generic [ref=e254]:
+                - link "/api/v1/bookmarks/categories/list" [ref=e256]:
+                  - /url: "#/收藏夹/list_categories_api_v1_bookmarks_categories_list_get"
+                  - generic [ref=e257]:
+                    - text: /api
+                    - text: /v1
+                    - text: /bookmarks
+                    - text: /categories
+                    - text: /list
+                - generic [ref=e258]: 获取分类列表
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e261]:
+              - img [ref=e262]
+            - button "get /api/v1/bookmarks/categories/list" [ref=e264]:
+              - img [ref=e265]
+          - generic [ref=e269] [cursor=pointer]:
+            - button "POST /api/v1/bookmarks/categories 创建分类" [ref=e270]:
+              - generic [ref=e271]: POST
+              - generic [ref=e272]:
+                - link "/api/v1/bookmarks/categories" [ref=e274]:
+                  - /url: "#/收藏夹/create_category_api_v1_bookmarks_categories_post"
+                  - generic [ref=e275]:
+                    - text: /api
+                    - text: /v1
+                    - text: /bookmarks
+                    - text: /categories
+                - generic [ref=e276]: 创建分类
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e279]:
+              - img [ref=e280]
+            - button "post /api/v1/bookmarks/categories" [ref=e282]:
+              - img [ref=e283]
+          - generic [ref=e287] [cursor=pointer]:
+            - 'button "PUT /api/v1/bookmarks/categories/{category_id} 更新分类" [ref=e288]':
+              - generic [ref=e289]: PUT
+              - generic [ref=e290]:
+                - 'link "/api/v1/bookmarks/categories/{category_id}" [ref=e292]':
+                  - /url: "#/收藏夹/update_category_api_v1_bookmarks_categories__category_id__put"
+                  - generic [ref=e293]:
+                    - text: /api
+                    - text: /v1
+                    - text: /bookmarks
+                    - text: /categories
+                    - text: "/{category_id}"
+                - generic [ref=e294]: 更新分类
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e297]:
+              - img [ref=e298]
+            - 'button "put /api/v1/bookmarks/categories/{category_id}" [ref=e300]':
+              - img [ref=e301]
+          - generic [ref=e305] [cursor=pointer]:
+            - 'button "DELETE /api/v1/bookmarks/categories/{category_id} 删除分类" [ref=e306]':
+              - generic [ref=e307]: DELETE
+              - generic [ref=e308]:
+                - 'link "/api/v1/bookmarks/categories/{category_id}" [ref=e310]':
+                  - /url: "#/收藏夹/delete_category_api_v1_bookmarks_categories__category_id__delete"
+                  - generic [ref=e311]:
+                    - text: /api
+                    - text: /v1
+                    - text: /bookmarks
+                    - text: /categories
+                    - text: "/{category_id}"
+                - generic [ref=e312]: 删除分类
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e315]:
+              - img [ref=e316]
+            - 'button "delete /api/v1/bookmarks/categories/{category_id}" [ref=e318]':
+              - img [ref=e319]
+          - generic [ref=e323] [cursor=pointer]:
+            - button "GET /api/v1/bookmarks/tags/list 获取所有标签" [ref=e324]:
+              - generic [ref=e325]: GET
+              - generic [ref=e326]:
+                - link "/api/v1/bookmarks/tags/list" [ref=e328]:
+                  - /url: "#/收藏夹/list_tags_api_v1_bookmarks_tags_list_get"
+                  - generic [ref=e329]:
+                    - text: /api
+                    - text: /v1
+                    - text: /bookmarks
+                    - text: /tags
+                    - text: /list
+                - generic [ref=e330]: 获取所有标签
+            - generic "Copy to clipboard"
+            - button "get /api/v1/bookmarks/tags/list" [ref=e333]:
+              - img [ref=e334]
+          - generic [ref=e338] [cursor=pointer]:
+            - button "POST /api/v1/bookmarks/tags 创建标签" [ref=e339]:
+              - generic [ref=e340]: POST
+              - generic [ref=e341]:
+                - link "/api/v1/bookmarks/tags" [ref=e343]:
+                  - /url: "#/收藏夹/create_tag_api_v1_bookmarks_tags_post"
+                  - generic [ref=e344]:
+                    - text: /api
+                    - text: /v1
+                    - text: /bookmarks
+                    - text: /tags
+                - generic [ref=e345]: 创建标签
+            - generic "Copy to clipboard"
+            - button "post /api/v1/bookmarks/tags" [ref=e348]:
+              - img [ref=e349]
+      - generic [ref=e352]:
+        - heading "管理员 Collapse operation" [level=3] [ref=e353] [cursor=pointer]:
+          - link "管理员" [ref=e354]:
+            - /url: "#/管理员"
+          - button "Collapse operation" [expanded] [ref=e355]:
+            - img [ref=e356]
+        - generic [ref=e359]:
+          - generic [ref=e362] [cursor=pointer]:
+            - button "GET /api/v1/admin/tags 获取所有标签（含使用统计）" [ref=e363]:
+              - generic [ref=e364]: GET
+              - generic [ref=e365]:
+                - link "/api/v1/admin/tags" [ref=e367]:
+                  - /url: "#/管理员/admin_list_tags_api_v1_admin_tags_get"
+                  - generic [ref=e368]:
+                    - text: /api
+                    - text: /v1
+                    - text: /admin
+                    - text: /tags
+                - generic [ref=e369]: 获取所有标签（含使用统计）
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e372]:
+              - img [ref=e373]
+            - button "get /api/v1/admin/tags" [ref=e375]:
+              - img [ref=e376]
+          - generic [ref=e380] [cursor=pointer]:
+            - button "POST /api/v1/admin/tags 创建标签" [ref=e381]:
+              - generic [ref=e382]: POST
+              - generic [ref=e383]:
+                - link "/api/v1/admin/tags" [ref=e385]:
+                  - /url: "#/管理员/admin_create_tag_api_v1_admin_tags_post"
+                  - generic [ref=e386]:
+                    - text: /api
+                    - text: /v1
+                    - text: /admin
+                    - text: /tags
+                - generic [ref=e387]: 创建标签
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e390]:
+              - img [ref=e391]
+            - button "post /api/v1/admin/tags" [ref=e393]:
+              - img [ref=e394]
+          - generic [ref=e398] [cursor=pointer]:
+            - 'button "PUT /api/v1/admin/tags/{tag_id} 更新标签" [ref=e399]':
+              - generic [ref=e400]: PUT
+              - generic [ref=e401]:
+                - 'link "/api/v1/admin/tags/{tag_id}" [ref=e403]':
+                  - /url: "#/管理员/admin_update_tag_api_v1_admin_tags__tag_id__put"
+                  - generic [ref=e404]:
+                    - text: /api
+                    - text: /v1
+                    - text: /admin
+                    - text: /tags
+                    - text: "/{tag_id}"
+                - generic [ref=e405]: 更新标签
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e408]:
+              - img [ref=e409]
+            - 'button "put /api/v1/admin/tags/{tag_id}" [ref=e411]':
+              - img [ref=e412]
+          - generic [ref=e416] [cursor=pointer]:
+            - 'button "DELETE /api/v1/admin/tags/{tag_id} 删除标签" [ref=e417]':
+              - generic [ref=e418]: DELETE
+              - generic [ref=e419]:
+                - 'link "/api/v1/admin/tags/{tag_id}" [ref=e421]':
+                  - /url: "#/管理员/admin_delete_tag_api_v1_admin_tags__tag_id__delete"
+                  - generic [ref=e422]:
+                    - text: /api
+                    - text: /v1
+                    - text: /admin
+                    - text: /tags
+                    - text: "/{tag_id}"
+                - generic [ref=e423]: 删除标签
+            - generic "Copy to clipboard"
+            - button "authorization button unlocked" [ref=e426]:
+              - img [ref=e427]
+            - 'button "delete /api/v1/admin/tags/{tag_id}" [ref=e429]':
+              - img [ref=e430]
+      - generic [ref=e433]:
+        - heading "根路径 Collapse operation" [level=3] [ref=e434] [cursor=pointer]:
+          - link "根路径" [ref=e435]:
+            - /url: "#/根路径"
+          - button "Collapse operation" [expanded] [ref=e436]:
+            - img [ref=e437]
+        - generic [ref=e443] [cursor=pointer]:
+          - button "GET / Root" [ref=e444]:
+            - generic [ref=e445]: GET
+            - generic [ref=e446]:
+              - link / [ref=e448]:
+                - /url: "#/根路径/root__get"
+              - generic [ref=e449]: Root
+          - generic "Copy to clipboard"
+          - button "get /" [ref=e452]:
+            - img [ref=e453]
+    - generic [ref=e457]:
+      - heading "Schemas" [level=4] [ref=e458] [cursor=pointer]:
+        - button "Schemas" [expanded] [ref=e459]:
+          - generic [ref=e460]: Schemas
+          - img [ref=e461]
+      - generic [ref=e463]:
+        - article [ref=e464]:
+          - generic [ref=e465]:
+            - button "Body_login_for_access_token_api_v1_auth_token_post" [ref=e466] [cursor=pointer]:
+              - generic [ref=e468]: Body_login_for_access_token_api_v1_auth_token_post
+              - img [ref=e470]
+            - button "Expand all" [ref=e472] [cursor=pointer]
+            - strong [ref=e473]: object
+        - article [ref=e474]:
+          - generic [ref=e475]:
+            - button "BookmarkCreate" [ref=e476] [cursor=pointer]:
+              - generic [ref=e478]: BookmarkCreate
+              - img [ref=e480]
+            - button "Expand all" [ref=e482] [cursor=pointer]
+            - strong [ref=e483]: object
+        - article [ref=e484]:
+          - generic [ref=e485]:
+            - button "BookmarkListResponse" [ref=e486] [cursor=pointer]:
+              - generic [ref=e488]: BookmarkListResponse
+              - img [ref=e490]
+            - button "Expand all" [ref=e492] [cursor=pointer]
+            - strong [ref=e493]: object
+        - article [ref=e494]:
+          - generic [ref=e495]:
+            - button "BookmarkResponse" [ref=e496] [cursor=pointer]:
+              - generic [ref=e498]: BookmarkResponse
+              - img [ref=e500]
+            - button "Expand all" [ref=e502] [cursor=pointer]
+            - strong [ref=e503]: object
+        - article [ref=e504]:
+          - generic [ref=e505]:
+            - button "BookmarkUpdate" [ref=e506] [cursor=pointer]:
+              - generic [ref=e508]: BookmarkUpdate
+              - img [ref=e510]
+            - button "Expand all" [ref=e512] [cursor=pointer]
+            - strong [ref=e513]: object
+        - article [ref=e514]:
+          - generic [ref=e515]:
+            - button "CategoryCreate" [ref=e516] [cursor=pointer]:
+              - generic [ref=e518]: CategoryCreate
+              - img [ref=e520]
+            - button "Expand all" [ref=e522] [cursor=pointer]
+            - strong [ref=e523]: object
+        - article [ref=e524]:
+          - generic [ref=e525]:
+            - button "CategoryResponse" [ref=e526] [cursor=pointer]:
+              - generic [ref=e528]: CategoryResponse
+              - img [ref=e530]
+            - button "Expand all" [ref=e532] [cursor=pointer]
+            - strong [ref=e533]: object
+        - article [ref=e534]:
+          - generic [ref=e535]:
+            - button "CategoryUpdate" [ref=e536] [cursor=pointer]:
+              - generic [ref=e538]: CategoryUpdate
+              - img [ref=e540]
+            - button "Expand all" [ref=e542] [cursor=pointer]
+            - strong [ref=e543]: object
+        - article [ref=e544]:
+          - generic [ref=e545]:
+            - button "ClickCountResponse" [ref=e546] [cursor=pointer]:
+              - generic [ref=e548]: ClickCountResponse
+              - img [ref=e550]
+            - button "Expand all" [ref=e552] [cursor=pointer]
+            - strong [ref=e553]: object
+        - article [ref=e554]:
+          - generic [ref=e555]:
+            - button "HTTPValidationError" [ref=e556] [cursor=pointer]:
+              - generic [ref=e558]: HTTPValidationError
+              - img [ref=e560]
+            - button "Expand all" [ref=e562] [cursor=pointer]
+            - strong [ref=e563]: object
+        - article [ref=e564]:
+          - generic [ref=e565]:
+            - button "TagCreate" [ref=e566] [cursor=pointer]:
+              - generic [ref=e568]: TagCreate
+              - img [ref=e570]
+            - button "Expand all" [ref=e572] [cursor=pointer]
+            - strong [ref=e573]: object
+        - article [ref=e574]:
+          - generic [ref=e575]:
+            - button "TagResponse" [ref=e576] [cursor=pointer]:
+              - generic [ref=e578]: TagResponse
+              - img [ref=e580]
+            - button "Expand all" [ref=e582] [cursor=pointer]
+            - strong [ref=e583]: object
+        - article [ref=e584]:
+          - generic [ref=e585]:
+            - button "TokenResponse" [ref=e586] [cursor=pointer]:
+              - generic [ref=e588]: TokenResponse
+              - img [ref=e590]
+            - button "Expand all" [ref=e592] [cursor=pointer]
+            - strong [ref=e593]: object
+        - article [ref=e594]:
+          - generic [ref=e595]:
+            - button "UserCreate" [ref=e596] [cursor=pointer]:
+              - generic [ref=e598]: UserCreate
+              - img [ref=e600]
+            - button "Expand all" [ref=e602] [cursor=pointer]
+            - strong [ref=e603]: object
+        - article [ref=e604]:
+          - generic [ref=e605]:
+            - button "UserResponse" [ref=e606] [cursor=pointer]:
+              - generic [ref=e608]: UserResponse
+              - img [ref=e610]
+            - button "Expand all" [ref=e612] [cursor=pointer]
+            - strong [ref=e613]: object
+        - article [ref=e614]:
+          - generic [ref=e615]:
+            - button "UserUpdate" [ref=e616] [cursor=pointer]:
+              - generic [ref=e618]: UserUpdate
+              - img [ref=e620]
+            - button "Expand all" [ref=e622] [cursor=pointer]
+            - strong [ref=e623]: object
+        - article [ref=e624]:
+          - generic [ref=e625]:
+            - button "ValidationError" [ref=e626] [cursor=pointer]:
+              - generic [ref=e628]: ValidationError
+              - img [ref=e630]
+            - button "Expand all" [ref=e632] [cursor=pointer]
+            - strong [ref=e633]: object

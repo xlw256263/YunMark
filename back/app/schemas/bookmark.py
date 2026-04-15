@@ -2,6 +2,8 @@ from pydantic import BaseModel, HttpUrl, ConfigDict
 from typing import Optional, List
 from datetime import datetime
 
+# 延迟导入避免循环依赖
+from app.schemas import tag_category
 
 # ============ 标签相关 Schemas ============
 
@@ -27,22 +29,35 @@ class TagCreate(TagBase):
     创建标签请求模型
     
     继承自 TagBase，用于接收前端创建新标签时提交的数据。
-    目前只需提供标签名称。
     """
-    pass
+    category_id: Optional[int] = None  # 所属分类ID（可选）
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "name": "Python",
+                "category_id": 1
+            }
+        }
 
 
 class TagResponse(TagBase):
     """
     标签响应模型
     
-    用于向后端返回标签详细信息，包含数据库生成的 ID。
+    用于向后端返回标签详细信息，包含数据库生成的 ID、使用统计和分类信息。
     """
     id: int  # 标签的唯一标识符
+    usage_count: int = 0  # 标签使用次数统计
+    category_id: Optional[int] = None  # 所属分类ID（可选）
+    category: Optional[tag_category.TagCategoryResponse] = None  # 嵌套的分类详情对象
 
     class Config:
         # 允许从 ORM 模型（如 SQLAlchemy 对象）直接转换为 Pydantic 模型
         from_attributes = True
+
+# 重新构建模型以解析前向引用
+TagResponse.model_rebuild(_types_namespace={'TagCategoryResponse': tag_category.TagCategoryResponse})
 
 
 # ============ 分类相关 Schemas ============

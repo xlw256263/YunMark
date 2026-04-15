@@ -61,3 +61,24 @@ def get_current_active_user(
         User 对象
     """
     return current_user
+
+
+def get_current_admin_user(
+        current_user: User = Depends(get_current_user)
+) -> User:
+    """
+    获取当前管理员用户（权限依赖）
+
+    Args:
+        current_user: 当前用户对象
+
+    Returns:
+        User 对象（必须是 admin 角色）
+
+    Raises:
+        AuthenticationError: 如果用户不是管理员
+    """
+    if current_user.role != 'admin':
+        raise AuthenticationError("需要管理员权限")
+    
+    return current_user
