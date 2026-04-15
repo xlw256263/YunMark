@@ -17,38 +17,29 @@
       <aside class="sidebar">
         <div class="menu-item" :class="{ active: $route.name === 'Dashboard' }">
           <router-link to="/dashboard">
-            <i class="icon-home"></i>
-            首页
+            <span class="icon-home">🏠</span>
+            <span>首页</span>
           </router-link>
         </div>
-        <div class="menu-item">
-          <router-link to="/category/tech">
-            <i class="icon-category"></i>
-            技术
-          </router-link>
-        </div>
-        <div class="menu-item">
-          <router-link to="/category/design">
-            <i class="icon-category"></i>
-            设计
-          </router-link>
-        </div>
-        <div class="menu-item">
-          <router-link to="/category/life">
-            <i class="icon-category"></i>
-            生活
-          </router-link>
+        <div
+          v-for="category in categories"
+          :key="category.id"
+          class="menu-item"
+          @click="goToCategory(category.id)"
+        >
+          <span class="icon-category">📁</span>
+          <span>{{ category.name }}</span>
         </div>
         <div class="menu-item" :class="{ active: $route.name === 'Favorites' }">
           <router-link to="/favorites">
-            <i class="icon-favorite"></i>
-            收藏
+            <span class="icon-favorite">❤️</span>
+            <span>收藏</span>
           </router-link>
         </div>
         <div class="menu-item" :class="{ active: $route.name === 'Profile' }">
           <router-link to="/profile">
-            <i class="icon-user"></i>
-            个人中心
+            <span class="icon-user">👤</span>
+            <span>个人中心</span>
           </router-link>
         </div>
       </aside>
@@ -91,13 +82,17 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { useBookmarkStore } from '@/stores/bookmark.js'
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
+const bookmarkStore = useBookmarkStore()
 
 const username = computed(() => userStore.username)
+const categories = computed(() => bookmarkStore.categories)
 
 // 示例推荐数据
 const recommendations = ref([
@@ -163,8 +158,20 @@ const recommendations = ref([
   }
 ])
 
+onMounted(async () => {
+  try {
+    console.log('Dashboard mounted, loading categories...')
+    await bookmarkStore.fetchCategories()
+    console.log('Categories loaded:', bookmarkStore.categories.value)
+  } catch (error) {
+    console.error('Failed to load categories:', error)
+    alert('加载分类失败，请刷新页面重试')
+  }
+})
+
 const logout = () => {
   userStore.logout()
+  bookmarkStore.resetState()
   router.push('/')
 }
 
@@ -172,13 +179,25 @@ const goToWebsite = (url) => {
   window.open(url, '_blank')
 }
 
-const addToFavorites = (item) => {
-  item.isFavorite = !item.isFavorite
-  if (item.isFavorite) {
-    alert(`已收藏 ${item.title}`)
-  } else {
-    alert(`已取消收藏 ${item.title}`)
+const addToFavorites = async (item) => {
+  try {
+    await bookmarkStore.addBookmark({
+      title: item.title,
+      url: item.url,
+      description: item.description,
+      favicon: item.image,
+      tag_ids: []
+    })
+    item.isFavorite = !item.isFavorite
+    alert(item.isFavorite ? `已收藏 ${item.title}` : `已取消收藏 ${item.title}`)
+  } catch (error) {
+    console.error('收藏失败:', error)
+    alert('收藏失败，请重试')
   }
+}
+
+const goToCategory = (categoryId) => {
+  router.push(`/favorites?category=${categoryId}`)
 }
 </script>
 
@@ -237,9 +256,11 @@ const addToFavorites = (item) => {
 
 .menu-item {
   padding: 12px 20px;
+  cursor: pointer;
 }
 
-.menu-item a {
+.menu-item a,
+.menu-item {
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -249,34 +270,14 @@ const addToFavorites = (item) => {
   border-radius: 5px;
 }
 
-.menu-item a:hover {
+.menu-item:hover {
   background: #f5f7fa;
   color: #4a90e2;
 }
 
-.menu-item.active a {
+.menu-item.active {
   background: #4a90e2;
   color: white;
-}
-
-.icon-home::before {
-  content: '🏠';
-  margin-right: 8px;
-}
-
-.icon-category::before {
-  content: '📁';
-  margin-right: 8px;
-}
-
-.icon-favorite::before {
-  content: '❤️';
-  margin-right: 8px;
-}
-
-.icon-user::before {
-  content: '👤';
-  margin-right: 8px;
 }
 
 .content {
@@ -395,7 +396,7 @@ const addToFavorites = (item) => {
     width: 60px;
   }
 
-  .menu-item a span {
+  .menu-item span:last-child {
     display: none;
   }
 

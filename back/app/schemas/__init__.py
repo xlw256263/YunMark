@@ -1,21 +1,3 @@
-from app.schemas.user import (
-    UserBase,
-    UserCreate,
-    UserUpdate,
-    UserResponse,
-    UserLogin,
-    Token,
-    TokenData,
-    TokenResponse,
-)
+from app.schemas.user import *
+from app.schemas.bookmark import *
 
-__all__ = [
-    "UserBase",
-    "UserCreate",
-    "UserUpdate",
-    "UserResponse",
-    "UserLogin",
-    "Token",
-    "TokenData",
-    "TokenResponse",
-]

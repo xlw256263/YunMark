@@ -5,6 +5,7 @@ from app.core.security import verify_password, create_access_token
 from app.models.user import User
 from app.schemas.user import TokenResponse
 from app.config import settings
+from fastapi import HTTPException, status
 
 
 class AuthService:
@@ -24,18 +25,33 @@ class AuthService:
             User 对象
 
         Raises:
-            ValueError: 如果用户不存在或密码错误
+            HTTPException: 如果用户不存在、密码错误或账号已禁用
         """
+        # 查询用户
         user = db.query(User).filter(User.email == email).first()
 
+        # 用户不存在
         if not user:
-            raise ValueError("Incorrect email or password")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="邮箱未注册，请先注册账号",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
 
+        # 密码错误
         if not verify_password(password, user.hashed_password):
-            raise ValueError("Incorrect email or password")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="密码错误，请重新输入",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
 
+        # 账号已禁用
         if not user.is_active:
-            raise ValueError("User account is disabled")
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="账号已被禁用，请联系管理员",
+            )
 
         return user
 

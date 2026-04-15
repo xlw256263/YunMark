@@ -14,7 +14,7 @@ class UserService:
         """根据 ID 获取用户"""
         user = db.query(User).filter(User.id == user_id).first()
         if not user:
-            raise NotFoundError("User not found")
+            raise NotFoundError("用户不存在")
         return user
 
     @staticmethod
@@ -44,11 +44,18 @@ class UserService:
         """
         # 检查邮箱是否已存在
         if UserService.get_user_by_email(db, user_data.email):
-            raise ConflictError("Email already registered")
+            raise ConflictError("该邮箱已被注册，请使用其他邮箱")
 
         # 检查用户名是否已存在
         if UserService.get_user_by_username(db, user_data.username):
-            raise ConflictError("Username already exists")
+            raise ConflictError("该用户名已被占用，请使用其他用户名")
+
+        # 密码长度验证
+        if len(user_data.password) < 6:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="密码长度至少为6位"
+            )
 
         # 创建新用户
         hashed_password = get_password_hash(user_data.password)
