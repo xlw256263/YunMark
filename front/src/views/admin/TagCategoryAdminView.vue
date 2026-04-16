@@ -53,18 +53,21 @@
       v-model="dialogVisible"
       :title="isEdit ? '编辑分类' : '新增分类'"
       width="500px"
+      @keydown.enter.prevent
     >
       <el-form
         ref="formRef"
         :model="formData"
         :rules="formRules"
         label-width="80px"
+        @submit.prevent="handleSubmit"
       >
         <el-form-item label="分类名称" prop="name">
           <el-input
             v-model="formData.name"
             placeholder="请输入分类名称"
             clearable
+            @keyup.enter="handleSubmit"
           />
         </el-form-item>
         <el-form-item label="描述" prop="description">

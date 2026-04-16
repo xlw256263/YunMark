@@ -5,58 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b4244f8-85ca-4c4a-8a3c-4acbac49f6fb" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/back/admin_api_test.ps1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back/app/api/v1/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back/app/models/tag_category.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back/app/schemas/tag_category.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back/app/services/tag_category_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/api/admin.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/layouts/AdminLayout.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/utils/favicon.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/views/admin/TagAdminView.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/views/admin/TagCategoryAdminView.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/文档/Playwright_CLI自动化测试指南.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/文档/Skill.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ .gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/ .gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/文档/开发问题/FastAPI 公开路由返回 401 的深度排查与根治.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API_接口对接文档.md" beforeDir="false" afterPath="$PROJECT_DIR$/文档/API_接口对接文档.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PRD_云藏智能收藏夹.md" beforeDir="false" afterPath="$PROJECT_DIR$/文档/PRD_云藏智能收藏夹.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PRD_云藏智能收藏夹v1.1.md" beforeDir="false" afterPath="$PROJECT_DIR$/文档/PRD_云藏智能收藏夹v1.1.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/api/v1/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/api/v1/api.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/dependencies.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/dependencies.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/models/bookmark.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/models/bookmark.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/models/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/schemas/bookmark.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/schemas/bookmark.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/app/api/v1/bookmarks.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/api/v1/bookmarks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/app/schemas/tag_category.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/schemas/tag_category.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/app/schemas/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/schemas/user.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/app/services/auth_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/services/auth_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/app/services/bookmark_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/services/bookmark_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deepseek_markdown_20260414_5bf0ab.md" beforeDir="false" afterPath="$PROJECT_DIR$/文档/deepseek_markdown_20260414_5bf0ab.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/@element-plus_icons-vue.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/@element-plus_icons-vue.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/chunk-5WRI5ZAA.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/chunk-5WRI5ZAA.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/chunk-BGRZ6U3R.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/chunk-BGRZ6U3R.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/chunk-KBO5XXYD.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/chunk-KBO5XXYD.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/element-plus.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/element-plus.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/element-plus_dist_locale_zh-cn__mjs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/element-plus_dist_locale_zh-cn__mjs.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/pinia.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/pinia.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/vue.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps_temp_b89b8375/vue.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/app/services/tag_category_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/services/tag_category_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/frontend-setup-guide.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/api/bookmark.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/api/bookmark.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/api/category.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/api/category.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/api/request.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/api/request.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/api/tag.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/api/tag.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/components/LoginDialog.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/LoginDialog.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/layouts/AppLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/layouts/AppLayout.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/router/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/stores/bookmark.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/stores/bookmark.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/types/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/stores/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/stores/user.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/views/BookmarkView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/BookmarkView.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/教程/Docker 全栈部署从入门到实战.md" beforeDir="false" afterPath="$PROJECT_DIR$/文档/Docker 全栈部署从入门到实战.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/Category.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/Dashboard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/Favorites.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/Login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/Login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/Profile.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/admin/TagAdminView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/admin/TagAdminView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/admin/TagCategoryAdminView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/admin/TagCategoryAdminView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/vite.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/vite.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +89,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/bookmark-ui-enhancement&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/bookmark-enhancement&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/shumeng/Desktop/求职/2026/FastAPI_demo&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -163,7 +139,10 @@
       <workItem from="1776238038147" duration="4317000" />
       <workItem from="1776243034347" duration="299000" />
       <workItem from="1776243472687" duration="8185000" />
-      <workItem from="1776270375567" duration="9680000" />
+      <workItem from="1776270375567" duration="10096000" />
+      <workItem from="1776313347634" duration="521000" />
+      <workItem from="1776314132218" duration="21307000" />
+      <workItem from="1776356292636" duration="3541000" />
     </task>
     <servers />
   </component>
@@ -171,10 +150,7 @@
     <option name="version" value="3" />
     <option name="exactExcludedFiles">
       <list>
-        <option value="$PROJECT_DIR$/front/src/api/bookmark.js" />
-        <option value="$PROJECT_DIR$/front/src/api/request.js" />
         <option value="$PROJECT_DIR$/front/vite.config.js" />
-        <option value="$PROJECT_DIR$/front/src/stores/user.js" />
       </list>
     </option>
   </component>
@@ -215,12 +191,17 @@
         <entry key="MAIN">
           <value>
             <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
               <option name="FILTERS">
                 <map>
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/feature/docker-up" />
+                        <option value="feature/bookmark-enhancement" />
                       </list>
                     </value>
                   </entry>

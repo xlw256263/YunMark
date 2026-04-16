@@ -7,13 +7,14 @@ import type { Bookmark, BookmarkCreate, BookmarkUpdate, BookmarkListResponse } f
 /**
  * 获取书签列表
  * GET /bookmarks
- * @param params - 查询参数（分页、分类、标签）
+ * @param params - 查询参数（分页、分类、标签、搜索）
  */
 export const getBookmarks = (params?: {
   page?: number
   page_size?: number
   category_id?: number
   tag_ids?: number[]
+  title?: string  // 搜索关键词
 }) => {
   return request.get<BookmarkListResponse>('/bookmarks', { params })
 }

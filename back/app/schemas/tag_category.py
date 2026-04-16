@@ -42,7 +42,7 @@ class TagCategoryResponse(TagCategoryBase):
     标签分类响应模型
     """
     id: int
-    created_at: datetime
+    created_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True

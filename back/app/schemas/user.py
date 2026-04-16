@@ -67,6 +67,5 @@ class TokenData(BaseModel):
 
 
 class TokenResponse(Token):
-    """扩展的 Token 响应（包含用户信息）"""
-    username: str
-    email: str
+    """扩展的 Token 响应（包含完整用户信息）"""
+    user: UserResponse

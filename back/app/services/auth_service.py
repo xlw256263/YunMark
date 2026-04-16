@@ -3,7 +3,7 @@ from datetime import timedelta
 from sqlalchemy.orm import Session
 from app.core.security import verify_password, create_access_token
 from app.models.user import User
-from app.schemas.user import TokenResponse
+from app.schemas.user import TokenResponse, UserResponse
 from app.config import settings
 from fastapi import HTTPException, status
 
@@ -75,6 +75,11 @@ class AuthService:
         return TokenResponse(
             access_token=access_token,
             token_type="bearer",
-            username=user.username,
-            email=user.email
+            user=UserResponse(
+                id=user.id,
+                username=user.username,
+                email=user.email,
+                is_active=user.is_active,
+                role=user.role
+            )
         )

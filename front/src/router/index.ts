@@ -141,6 +141,12 @@ router.beforeEach((to, from, next) => {
   // 获取用户 Store
   const userStore = useUserStore()
   
+  // 关键修复：在路由守卫中立即恢复用户状态（同步）
+  // 这样 isLoggedIn 才能正确判断
+  if (!userStore.accessToken && localStorage.getItem('access_token')) {
+    userStore.restoreFromStorage()
+  }
+  
   // 设置页面标题
   document.title = to.meta.title ? `${to.meta.title} - 云藏` : '云藏·智能收藏夹'
   

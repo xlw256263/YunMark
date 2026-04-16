@@ -12,7 +12,7 @@ import {
   incrementClickCount as incrementClickCountApi,
 } from '@/api/bookmark'
 import { getCategories, createCategory as createCategoryApi } from '@/api/category'
-import { getTags } from '@/api/tag'
+import { getTags, getMyTags } from '@/api/tag'
 import type {
   Bookmark,
   BookmarkCreate,
@@ -35,7 +35,7 @@ export const useBookmarkStore = defineStore('bookmark', () => {
   const currentPage = ref(1)
 
   /** 每页数量 */
-  const pageSize = ref(10)
+  const pageSize = ref(5)
 
   /** 加载状态 */
   const loading = ref(false)
@@ -50,8 +50,11 @@ export const useBookmarkStore = defineStore('bookmark', () => {
 
   // ==================== 标签状态 ====================
 
-  /** 标签列表 */
+  /** 标签列表（系统中所有标签） */
   const tags = ref<Tag[]>([])
+
+  /** 当前用户使用的标签列表 */
+  const myTags = ref<Tag[]>([])
 
   /** 标签加载状态 */
   const tagLoading = ref(false)
@@ -67,6 +70,7 @@ export const useBookmarkStore = defineStore('bookmark', () => {
     page_size?: number
     category_id?: number
     tag_ids?: number[]
+    title?: string
   }) {
     loading.value = true
     try {
@@ -75,6 +79,7 @@ export const useBookmarkStore = defineStore('bookmark', () => {
         page_size: params?.page_size || pageSize.value,
         category_id: params?.category_id,
         tag_ids: params?.tag_ids,
+        title: params?.title,
       })
 
       bookmarks.value = response.items
@@ -229,13 +234,28 @@ export const useBookmarkStore = defineStore('bookmark', () => {
     }
   }
 
+  /**
+   * 获取当前用户使用的标签
+   */
+  async function fetchMyTags() {
+    tagLoading.value = true
+    try {
+      myTags.value = await getMyTags()
+    } catch (error) {
+      console.error('获取用户标签失败:', error)
+      throw error
+    } finally {
+      tagLoading.value = false
+    }
+  }
+
   // ==================== 初始化 ====================
 
   /**
-   * 初始化数据（加载分类和标签）
+   * 初始化数据（加载分类、标签和用户标签）
    */
   async function init() {
-    await Promise.all([fetchCategories(), fetchTags()])
+    await Promise.all([fetchCategories(), fetchTags(), fetchMyTags()])
   }
 
   return {
@@ -252,6 +272,7 @@ export const useBookmarkStore = defineStore('bookmark', () => {
 
     // 标签状态
     tags,
+    myTags,
     tagLoading,
 
     // 书签操作
@@ -267,6 +288,7 @@ export const useBookmarkStore = defineStore('bookmark', () => {
 
     // 标签操作
     fetchTags,
+    fetchMyTags,
 
     // 初始化
     init,
