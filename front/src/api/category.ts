@@ -2,7 +2,7 @@
  * 分类相关 API 接口
  */
 import request from './request'
-import type { Category, CategoryCreate, CategoryUpdate } from '@/types'
+import type { Category, CategoryCreate, CategoryUpdate, TagCategory } from '@/types'
 
 /**
  * 获取所有分类
@@ -38,4 +38,12 @@ export const updateCategory = (id: number, data: CategoryUpdate) => {
  */
 export const deleteCategory = (id: number) => {
   return request.delete<{ message: string }>(`/bookmarks/categories/${id}`)
+}
+
+/**
+ * 获取标签分类列表（公开接口）
+ * GET /bookmarks/tag-categories
+ */
+export const getTagCategories = () => {
+  return request.get<TagCategory[]>('/bookmarks/tag-categories')
 }

@@ -10,7 +10,7 @@ from app.core.exceptions import NotFoundError
 
 
 class TagCategoryService:
-    """管理员标签分类服务类"""
+    """标签分类服务类"""
 
     @staticmethod
     def get_all_categories(db: Session, sort_by_order: bool = True) -> List[TagCategoryResponse]:

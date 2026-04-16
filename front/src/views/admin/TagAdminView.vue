@@ -84,12 +84,14 @@
       v-model="dialogVisible"
       :title="isEdit ? '编辑标签' : '新增标签'"
       width="500px"
+      @keydown.enter.prevent
     >
       <el-form
         ref="formRef"
         :model="formData"
         :rules="formRules"
         label-width="100px"
+        @submit.prevent="handleSubmit"
       >
         <el-form-item label="标签分类" prop="category_id">
           <el-select
@@ -111,6 +113,7 @@
             v-model="formData.name"
             placeholder="请输入标签名称"
             clearable
+            @keyup.enter="handleSubmit"
           />
         </el-form-item>
       </el-form>

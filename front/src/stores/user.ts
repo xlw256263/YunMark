@@ -1,11 +1,27 @@
-// src/stores/user.ts
-/**
- * 用户状态管理 Store
- * 管理用户登录状态、Token 和用户信息
- */
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { User } from '@/types'
+
+/**
+ * 检查 JWT Token 是否过期
+ */
+function isTokenExpired(token: string): boolean {
+  try {
+    const parts = token.split('.')
+    if (parts.length !== 3) return true
+    
+    // JWT payload 是 Base64Url 编码
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')))
+    const exp = payload.exp
+    if (!exp) return true
+    
+    // exp 是秒级时间戳
+    const now = Math.floor(Date.now() / 1000)
+    return exp < now
+  } catch {
+    return true
+  }
+}
 
 export const useUserStore = defineStore('user', () => {
   // ==================== 状态 (State) ====================
@@ -27,21 +43,18 @@ export const useUserStore = defineStore('user', () => {
   /** 邮箱 */
   const email = computed(() => userInfo.value?.email || '')
 
-  /** 是否为管理员（待后端实现） */
+  /** 是否为管理员 */
   const isAdmin = computed(() => userInfo.value?.role === 'admin')
 
   // ==================== 动作 (Actions) ====================
 
   /**
    * 设置用户信息和 Token
-   * @param token - JWT 访问令牌
-   * @param user - 用户信息对象
    */
   function setUserInfo(token: string, user: User) {
     accessToken.value = token
     userInfo.value = user
 
-    // 持久化到 localStorage
     localStorage.setItem('access_token', token)
     localStorage.setItem('user', JSON.stringify(user))
   }
@@ -55,6 +68,13 @@ export const useUserStore = defineStore('user', () => {
 
     if (token && userStr) {
       try {
+        // 关键修复：检查 Token 是否已过期
+        if (isTokenExpired(token)) {
+          console.log('[UserStore] Token 已过期，清除本地存储')
+          logout()
+          return
+        }
+        
         accessToken.value = token
         userInfo.value = JSON.parse(userStr)
       } catch (error) {
@@ -66,20 +86,17 @@ export const useUserStore = defineStore('user', () => {
 
   /**
    * 登出
-   * 清除所有用户相关数据
    */
   function logout() {
     accessToken.value = ''
     userInfo.value = null
 
-    // 清除 localStorage
     localStorage.removeItem('access_token')
     localStorage.removeItem('user')
   }
 
   /**
    * 更新用户信息
-   * @param user - 新的用户信息
    */
   function updateUserInfo(user: User) {
     userInfo.value = user
@@ -87,17 +104,12 @@ export const useUserStore = defineStore('user', () => {
   }
 
   return {
-    // 状态
     accessToken,
     userInfo,
-
-    // 计算属性
     isLoggedIn,
     username,
     email,
     isAdmin,
-
-    // 动作
     setUserInfo,
     restoreFromStorage,
     logout,

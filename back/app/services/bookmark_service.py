@@ -20,10 +20,11 @@ class BookmarkService:
             page: int = 1,
             page_size: int = 10,
             category_id: Optional[int] = None,
-            tag_ids: Optional[List[int]] = None
+            tag_ids: Optional[List[int]] = None,
+            title: Optional[str] = None
     ) -> BookmarkListResponse:
         """
-        获取书签列表（支持分页和过滤）
+        获取书签列表（支持分页、过滤和模糊搜索）
 
         Args:
             db: 数据库会话对象
@@ -32,6 +33,7 @@ class BookmarkService:
             page_size: 每页显示数量，默认为10
             category_id: 可选，按分类ID进行过滤
             tag_ids: 可选，按标签ID列表进行过滤（多对多关系）
+            title: 可选，按标题进行模糊搜索（不区分大小写）
 
         Returns:
             BookmarkListResponse: 包含总记录数、当前页码、每页数量及书签列表的响应对象
@@ -46,10 +48,21 @@ class BookmarkService:
         # 如果指定了标签ID列表，通过关联表进行过滤
         # 注意：这里 Bookmark.tags 是定义好的多对多关系
         if tag_ids:
-            # 通过 join 关联 Bookmark 和 Tag 的多对多关系表
-            # 然后过滤出 tag_id 在给定列表中的记录
-            # 注意：如果 tag_ids 中有多个 ID，这里会返回包含任意一个指定标签的书签（OR 逻辑）
-            query = query.join(Bookmark.tags).filter(Tag.id.in_(tag_ids))
+            # 使用子查询避免 JOIN 导致的重复记录
+            # 找到包含任意一个指定标签的书签 ID
+            from sqlalchemy import exists
+            subquery = db.query(Bookmark.id).join(Bookmark.tags).filter(
+                Tag.id.in_(tag_ids),
+                Bookmark.user_id == user_id
+            ).subquery()
+            
+            query = query.filter(Bookmark.id.in_(subquery))
+
+        # 如果提供了标题搜索关键词，添加模糊搜索条件
+        if title and title.strip():
+            # MySQL 默认不区分大小写，直接使用 like 进行模糊匹配
+            # PostgreSQL 用户可改用 ilike
+            query = query.filter(Bookmark.title.like(f"%{title.strip()}%"))
 
         # 执行计数查询，获取满足条件的总记录数
         total = query.count()

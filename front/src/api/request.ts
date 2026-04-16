@@ -25,6 +25,7 @@ const PUBLIC_APIS = [
   '/auth/token',      // 登录
   '/auth/register',   // 注册
   '/bookmarks/tags/list',  // 获取标签列表（公开）
+  '/bookmarks/tag-categories',  // 获取标签分类（公开）
 ]
 
 /**

@@ -2,14 +2,20 @@
  * 标签相关 API 接口
  */
 import request from './request'
-import type { Tag, TagCreate } from '@/types'
+import type { Tag } from '@/types'
 
 /**
- * 获取所有标签
- * GET /bookmarks/tags/list
+ * 获取所有标签（公开接口）
  */
 export const getTags = () => {
   return request.get<Tag[]>('/bookmarks/tags/list')
+}
+
+/**
+ * 获取当前用户使用的标签
+ */
+export const getMyTags = () => {
+  return request.get<Tag[]>('/bookmarks/tags/my-tags')
 }
 
 /**

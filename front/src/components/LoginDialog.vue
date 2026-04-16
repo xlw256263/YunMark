@@ -278,9 +278,19 @@ const handleLogin = async () => {
       ElMessage.success('登录成功！')
       visible.value = false
 
-      // 跳转到重定向页面或首页
+      // ==================== 安全重定向逻辑 ====================
       const redirect = route.query.redirect as string
-      router.push(redirect || '/')
+      if (redirect) {
+        // 权限校验：如果目标是管理员页面，但当前用户不是管理员，则拦截
+        if (redirect.startsWith('/admin') && userInfo.role !== 'admin') {
+          console.warn('权限不足，拦截管理员页面跳转，重定向至首页')
+          router.push('/')
+        } else {
+          router.push(redirect)
+        }
+      } else {
+        router.push('/')
+      }
     } catch (error: any) {
       // 显示具体错误信息
       errorMessage.value = getErrorMessage(error)

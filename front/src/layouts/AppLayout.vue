@@ -164,12 +164,16 @@ onMounted(() => {
 
 <style scoped>
 .app-layout {
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: #0f1923;
+  overflow: hidden;
 }
 
 /* ========== 顶部导航栏 ========== */
 .app-header {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -177,8 +181,6 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  position: sticky;
-  top: 0;
   z-index: 100;
 }
 
@@ -228,7 +230,8 @@ onMounted(() => {
 }
 
 .app-content {
-  min-height: calc(100vh - 73px);
+  flex: 1;
+  overflow: hidden;
 }
 </style>
 

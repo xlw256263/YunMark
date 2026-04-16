@@ -127,12 +127,11 @@ const handleLogin = async () => {
     // 保存 token 和用户信息
     userStore.setUserInfo(
       response.access_token,
-      response.username,
-      response.email
+      response.user
     )
 
     alert('登录成功！')
-    router.push(`/dashboard?username=${response.username}`)
+    router.push(`/dashboard?username=${response.user.username}`)
   } catch (error) {
     console.error('登录错误:', error)
     const errorMsg = error.response?.data?.detail || '登录失败，请检查邮箱和密码'
