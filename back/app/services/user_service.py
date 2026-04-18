@@ -24,13 +24,13 @@ class UserService:
 
     @staticmethod
     def get_user_by_email(db: Session, email: str) -> User:
-        """根据邮箱获取用户"""
-        return db.query(User).filter(User.email == email).first()
+        """根据邮箱获取用户（只查询激活状态的用户）"""
+        return db.query(User).filter(User.email == email, User.is_active == 1).first()
 
     @staticmethod
     def get_user_by_username(db: Session, username: str) -> User:
-        """根据用户名获取用户"""
-        return db.query(User).filter(User.username == username).first()
+        """根据用户名获取用户（只查询激活状态的用户）"""
+        return db.query(User).filter(User.username == username, User.is_active == 1).first()
 
     @staticmethod
     def create_user(db: Session, user_data: UserCreate) -> UserResponse:
@@ -209,6 +209,7 @@ class UserService:
     def delete_user(db: Session, user: User) -> bool:
         """
         删除用户（软删除，设置为非激活状态）
+        同时修改用户名和邮箱，解除数据库唯一性约束
 
         Args:
             db: 数据库会话
@@ -217,6 +218,13 @@ class UserService:
         Returns:
             bool 是否成功
         """
+        import time
+        
         user.is_active = 0
+
+        timestamp = int(time.time())
+        user.username = f"{user.username}_deleted_{timestamp}"
+        user.email = f"{user.email}_deleted_{timestamp}"
+
         db.commit()
         return True

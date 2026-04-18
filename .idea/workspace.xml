@@ -5,32 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b4244f8-85ca-4c4a-8a3c-4acbac49f6fb" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/back/migrations/add_user_profile_fields.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/文档/开发问题/标签分类关键字查询.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/文档/开发问题/个人中心模块开发.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/api/v1/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/api/v1/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/api/v1/bookmarks.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/api/v1/bookmarks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/api/v1/users.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/api/v1/users.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/models/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/schemas/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/schemas/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/services/bookmark_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/services/bookmark_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/app/services/user_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/services/user_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/back/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/api/admin.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/api/admin.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/api/bookmark.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/api/bookmark.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/api/request.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/api/request.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/api/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/api/user.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/LoginDialog.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/LoginDialog.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/components/MainLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/components/MainLayout.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/stores/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/stores/user.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/types/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/utils/favicon.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/utils/favicon.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/views/BookmarkView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/BookmarkView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/layouts/AppLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/layouts/AppLayout.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/views/ProfileView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/ProfileView.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/views/admin/TagAdminView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/admin/TagAdminView.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,22 +62,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/bookmark-tag&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/shumeng/Desktop/求职/2026/FastAPI_demo&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;通义灵码&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\shumeng\\Desktop\\求职\\2026\\FastAPI_demo\\front\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "feature/user-profile",
+    "last_opened_file_path": "C:/Users/shumeng/Desktop/求职/2026/FastAPI_demo",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "通义灵码",
+    "ts.external.directory.path": "C:\\Users\\shumeng\\Desktop\\求职\\2026\\FastAPI_demo\\front\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\shumeng\Desktop\求职\2026\FastAPI_demo" />
@@ -142,7 +121,7 @@
       <workItem from="1776314132218" duration="21307000" />
       <workItem from="1776356292636" duration="3830000" />
       <workItem from="1776470532860" duration="3182000" />
-      <workItem from="1776473760028" duration="4043000" />
+      <workItem from="1776473760028" duration="7568000" />
     </task>
     <servers />
   </component>
