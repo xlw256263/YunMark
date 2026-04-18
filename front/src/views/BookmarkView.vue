@@ -454,9 +454,11 @@ const displayTags = computed(() => {
 const handleTagClick = (tagId: number) => {
   const index = selectedTagIds.value.indexOf(tagId)
   if (index > -1) {
-    selectedTagIds.value.splice(index, 1)
+    // 取消选中：创建新数组
+    selectedTagIds.value = selectedTagIds.value.filter(id => id !== tagId)
   } else {
-    selectedTagIds.value.push(tagId)
+    // 选中：创建新数组
+    selectedTagIds.value = [...selectedTagIds.value, tagId]
   }
   searchQuery.value = ''
   bookmarkStore.currentPage = 1

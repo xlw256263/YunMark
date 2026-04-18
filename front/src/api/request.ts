@@ -7,6 +7,32 @@ import { ElMessage } from 'element-plus'
 import router from '@/router'
 
 /**
+ * 自定义参数序列化器
+ * 将数组参数序列化为 FastAPI 期望的格式：tag_ids=1&tag_ids=2
+ * 而不是默认的 tag_ids[]=1&tag_ids[]=2
+ */
+function serializeParams(params: Record<string, any>): string {
+  const parts: string[] = []
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value === undefined || value === null) {
+      continue
+    }
+
+    if (Array.isArray(value)) {
+      // 数组参数：每个值对应一个同名参数
+      for (const item of value) {
+        parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(item)}`)
+      }
+    } else {
+      parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    }
+  }
+
+  return parts.join('&')
+}
+
+/**
  * 创建 axios 实例
  * 配置基础URL和超时时间
  */
@@ -14,8 +40,11 @@ const request = axios.create({
   // API 基础路径，从环境变量读取，默认为 /api/v1
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api/v1',
   // 请求超时时间：10秒
-  timeout: 10000,
   // 注意：不在这里设置默认 Content-Type，让各个请求自己指定
+  // 自定义参数序列化器，正确处理数组参数
+  paramsSerializer: {
+    serialize: serializeParams
+  }
 })
 
 /**

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
@@ -20,23 +20,24 @@ router = APIRouter(prefix="/admin", tags=["管理员"])
 
 # ============ 标签管理 API ============
 
-@router.get("/tags", response_model=List[TagResponse], summary="获取所有标签（含使用统计）")
+@router.get("/tags", summary="获取所有标签（含使用统计，支持分页）")
 async def admin_list_tags(
+        page: int = Query(1, ge=1, description="页码"),
+        page_size: int = Query(20, ge=1, le=100, description="每页数量"),
+        category_id: Optional[int] = Query(None, description="按分类ID过滤"),
         current_user: User = Depends(get_current_admin_user),
         db: Session = Depends(get_db)
 ):
     """
-    管理员获取所有标签及其使用统计
+    管理员获取所有标签及其使用统计（支持分页和分类筛选）
 
+    - **page**: 页码（从1开始）
+    - **page_size**: 每页数量（1-100）
+    - **category_id**: 按分类ID过滤（可选）
     - 按使用次数降序排列
     - 仅管理员可访问
-
-    为何如此做：
-    1. 使用 get_current_admin_user 依赖确保只有管理员能访问
-    2. 返回 usage_count 字段，方便管理员了解标签使用情况
-    3. 为后续的标签清理和优化提供数据支持
     """
-    return AdminTagService.get_all_tags_with_stats(db)
+    return AdminTagService.get_all_tags_with_stats(db, page, page_size, category_id)
 
 
 @router.post("/tags", response_model=TagResponse, summary="创建标签")

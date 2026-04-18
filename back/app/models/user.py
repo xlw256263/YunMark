@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Text, DateTime
 from sqlalchemy.orm import relationship
+from datetime import datetime
 from app.db.base_class import Base
 
 
@@ -11,10 +12,13 @@ class User(Base):
     username = Column(String(50), unique=True, index=True, nullable=False)
     email = Column(String(255), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
-    is_active = Column(Integer, default=1)  # 1: 激活, 0: 禁用
-    role = Column(String(20), default='user', nullable=False)  # 'user' 或 'admin'
+    is_active = Column(Integer, default=1)
+    role = Column(String(20), default='user', nullable=False)
+    
+    avatar = Column(String(500), nullable=True)
+    bio = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
-    # 关系
     bookmarks = relationship("Bookmark", back_populates="user")
     categories = relationship("Category", back_populates="user")
 

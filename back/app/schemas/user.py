@@ -1,6 +1,7 @@
 # back/app/schemas/user.py
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
+from datetime import datetime
 
 
 class UserBase(BaseModel):
@@ -30,11 +31,28 @@ class UserUpdate(BaseModel):
     password: Optional[str] = None
 
 
+class UserProfileUpdate(BaseModel):
+    """更新个人资料请求模型"""
+    username: Optional[str] = Field(None, min_length=2, max_length=50)
+    email: Optional[EmailStr] = None
+    avatar: Optional[str] = None
+    bio: Optional[str] = Field(None, max_length=500)
+
+
+class PasswordChange(BaseModel):
+    """修改密码请求模型"""
+    old_password: str
+    new_password: str = Field(..., min_length=6, max_length=100)
+
+
 class UserResponse(UserBase):
     """用户响应模型（不包含密码）"""
     id: int
     is_active: int
     role: str = 'user'
+    avatar: Optional[str] = None
+    bio: Optional[str] = None
+    created_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True
@@ -44,7 +62,10 @@ class UserResponse(UserBase):
                 "username": "john_doe",
                 "email": "john@example.com",
                 "is_active": 1,
-                "role": "user"
+                "role": "user",
+                "avatar": "https://example.com/avatar.jpg",
+                "bio": "这是我的个人简介",
+                "created_at": "2024-01-01T00:00:00"
             }
         }
 
@@ -69,3 +90,9 @@ class TokenData(BaseModel):
 class TokenResponse(Token):
     """扩展的 Token 响应（包含完整用户信息）"""
     user: UserResponse
+
+
+class AvatarUploadResponse(BaseModel):
+    """头像上传响应模型"""
+    avatar_url: str
+    message: str = "头像上传成功"

@@ -24,7 +24,7 @@ async def list_bookmarks(
         page: int = Query(1, ge=1, description="页码"),
         page_size: int = Query(10, ge=1, le=100, description="每页数量"),
         category_id: Optional[int] = Query(None, description="按分类过滤"),
-        tag_ids: Optional[List[int]] = Query(None, description="按标签过滤"),
+        tag_ids: Optional[List[int]] = Query(default=None, description="按标签过滤"),
         title: Optional[str] = Query(None, description="按标题模糊搜索"),
         current_user: User = Depends(get_current_active_user),
         db: Session = Depends(get_db)
@@ -35,9 +35,14 @@ async def list_bookmarks(
     - **page**: 页码（从1开始）
     - **page_size**: 每页数量（1-100）
     - **category_id**: 按分类ID过滤
-    - **tag_ids**: 按标签ID列表过滤
+    - **tag_ids**: 按标签ID列表过滤（支持多个：?tag_ids=1&tag_ids=2）
     - **title**: 按标题模糊搜索
     """
+    # 调试日志
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.info(f"收到请求 - tag_ids: {tag_ids}, type: {type(tag_ids)}")
+    
     return BookmarkService.get_bookmarks(
         db=db,
         user_id=current_user.id,

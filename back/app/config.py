@@ -10,7 +10,7 @@ class Settings:
     """应用配置类"""
 
     # 应用基本信息
-    APP_NAME: str = "私人精品网页推荐系统"
+    APP_NAME: str = "云藏·智能收藏夹"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = True
 

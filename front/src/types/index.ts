@@ -54,6 +54,40 @@ export interface UserUpdate {
   password?: string
 }
 
+/**
+ * 个人资料更新请求
+ */
+export interface UserProfileUpdate {
+  /** 新用户名 */
+  username?: string
+  /** 新邮箱 */
+  email?: string
+  /** 头像URL */
+  avatar?: string
+  /** 个人简介 */
+  bio?: string
+}
+
+/**
+ * 密码修改请求
+ */
+export interface PasswordChange {
+  /** 原密码 */
+  old_password: string
+  /** 新密码 */
+  new_password: string
+}
+
+/**
+ * 头像上传响应
+ */
+export interface AvatarUploadResponse {
+  /** 头像URL */
+  avatar_url: string
+  /** 提示信息 */
+  message: string
+}
+
 // ==================== 认证相关类型 ====================
 
 /**

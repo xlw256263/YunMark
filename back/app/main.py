@@ -1,6 +1,8 @@
 # back/app/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from app.config import settings
 from app.db.database import init_db
 from app.api.v1 import api_router
@@ -12,7 +14,7 @@ def create_application() -> FastAPI:
     application = FastAPI(
         title=settings.APP_NAME,
         version=settings.APP_VERSION,
-        description="私人精品网页推荐系统 API",
+        description="云藏·智能收藏夹 API",
         docs_url="/docs",
         redoc_url="/redoc",
     )
@@ -34,6 +36,10 @@ def create_application() -> FastAPI:
 
 app = create_application()
 
+upload_dir = Path("uploads")
+upload_dir.mkdir(exist_ok=True)
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 
 @app.on_event("startup")
 def startup_event():
@@ -47,7 +53,7 @@ def startup_event():
 def root():
     """根路径"""
     return {
-        "message": "Welcome to 私人精品网页推荐系统 API",
+        "message": "Welcome to 云藏·智能收藏夹 API",
         "docs": "/docs",
         "version": settings.APP_VERSION
     }

@@ -1,23 +1,27 @@
-NEW_FILE_CODE
 // front/src/components/MainLayout.vue
 <template>
   <div class="main-layout">
-    <!-- 顶部导航栏 -->
     <nav class="navbar">
       <div class="nav-left">
         <slot name="nav-left">
-          <h2>私人精品网页推荐</h2>
+          <h2>云藏·智能收藏夹</h2>
         </slot>
       </div>
       <div class="nav-right">
         <span class="welcome">欢迎, {{ username }}</span>
+        <el-avatar
+          :size="36"
+          :src="userAvatar || undefined"
+          class="nav-avatar"
+          @click="$router.push('/profile')"
+        >
+          {{ username?.charAt(0)?.toUpperCase() }}
+        </el-avatar>
         <button class="btn btn-outline" @click="handleLogout">退出登录</button>
       </div>
     </nav>
 
-    <!-- 主要内容区域 -->
     <div class="main-content">
-      <!-- 侧边栏 -->
       <aside class="sidebar">
         <div
           v-for="item in menuItems"
@@ -30,11 +34,9 @@ NEW_FILE_CODE
           <span>{{ item.label }}</span>
         </div>
 
-        <!-- 自定义侧边栏内容 -->
         <slot name="sidebar"></slot>
       </aside>
 
-      <!-- 内容区 -->
       <main class="content">
         <slot></slot>
       </main>
@@ -47,14 +49,13 @@ import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useBookmarkStore } from '@/stores/bookmark.js'
+import { ElAvatar } from 'element-plus'
 
 const props = defineProps({
-  // 菜单项配置
   menuItems: {
     type: Array,
     default: () => []
   },
-  // 是否显示默认菜单
   showDefaultMenu: {
     type: Boolean,
     default: true
@@ -71,7 +72,32 @@ const bookmarkStore = useBookmarkStore()
 const username = computed(() => userStore.username)
 const categories = computed(() => bookmarkStore.categories)
 
-// 默认菜单项
+const userAvatar = computed(() => {
+  try {
+    const avatar = userStore.userInfo?.avatar
+
+    if (!avatar) {
+      return ''
+    }
+
+    if (avatar.startsWith('http')) {
+      return avatar
+    }
+
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1'
+
+    if (avatar.startsWith('/uploads')) {
+      const apiBaseUrl = baseUrl.replace('/api/v1', '')
+      return `${apiBaseUrl}${avatar}`
+    }
+
+    return `${baseUrl}${avatar}`
+  } catch (error) {
+    console.error('[MainLayout] Avatar URL error:', error)
+    return ''
+  }
+})
+
 const defaultMenuItems = computed(() => {
   const items = [
     { path: '/dashboard', label: '首页', icon: '🏠' },
@@ -153,6 +179,17 @@ const handleLogout = () => {
 .welcome {
   color: #666;
   font-size: 14px;
+}
+
+.nav-avatar {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid #e5e7eb;
+}
+
+.nav-avatar:hover {
+  transform: scale(1.1);
+  border-color: #667eea;
 }
 
 .main-content {

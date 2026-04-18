@@ -51,6 +51,7 @@ class BookmarkService:
             # 使用子查询避免 JOIN 导致的重复记录
             # 找到包含任意一个指定标签的书签 ID
             from sqlalchemy import exists
+            print(tag_ids)
             subquery = db.query(Bookmark.id).join(Bookmark.tags).filter(
                 Tag.id.in_(tag_ids),
                 Bookmark.user_id == user_id
@@ -514,18 +515,42 @@ class AdminTagService:
     """管理员标签服务类，提供标签的完整管理功能"""
 
     @staticmethod
-    def get_all_tags_with_stats(db: Session) -> List[TagResponse]:
+    def get_all_tags_with_stats(
+        db: Session,
+        page: int = 1,
+        page_size: int = 20,
+        category_id: Optional[int] = None
+    ) -> dict:
         """
-        获取所有标签及其使用统计（按使用次数降序排列）
+        获取所有标签及其使用统计（支持分页和分类筛选）
 
         Args:
             db: 数据库会话对象
+            page: 页码，默认为1
+            page_size: 每页数量，默认为20
+            category_id: 可选，按分类ID过滤
 
         Returns:
-            List[TagResponse]: 标签响应对象列表，包含使用次数
+            dict: 包含总记录数、当前页码、每页数量及标签列表的字典
         """
-        tags = db.query(Tag).order_by(Tag.usage_count.desc()).all()
-        return [TagResponse.model_validate(t) for t in tags]
+        query = db.query(Tag)
+        
+        if category_id is not None:
+            query = query.filter(Tag.category_id == category_id)
+        
+        total = query.count()
+        
+        tags = query.order_by(Tag.usage_count.desc()) \
+            .offset((page - 1) * page_size) \
+            .limit(page_size) \
+            .all()
+        
+        return {
+            "total": total,
+            "page": page,
+            "page_size": page_size,
+            "items": [TagResponse.model_validate(t) for t in tags]
+        }
 
     @staticmethod
     def create_tag(db: Session, tag_data: TagCreate) -> TagResponse:

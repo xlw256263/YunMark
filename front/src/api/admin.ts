@@ -9,10 +9,19 @@ import type { Tag, TagCreate, TagCategory, TagCategoryCreate, TagCategoryUpdate 
 // ============ 标签管理 ============
 
 /**
- * 获取所有标签（含使用统计）
+ * 获取所有标签（含使用统计，支持分页）
  */
-export function getAdminTags() {
-  return request.get<Tag[]>('/admin/tags')
+export function getAdminTags(params?: {
+  page?: number
+  page_size?: number
+  category_id?: number | null
+}) {
+  return request.get<{
+    total: number
+    page: number
+    page_size: number
+    items: Tag[]
+  }>('/admin/tags', { params })
 }
 
 /**

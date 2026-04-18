@@ -22,11 +22,17 @@ interface FaviconCacheEntry {
 const FAVICON_CACHE_CONFIG = {
   /** 缓存键前缀 */
   CACHE_KEY_PREFIX: 'favicon_cache_',
-  /** 缓存有效期（7 天） */
-  CACHE_TTL: 7 * 24 * 60 * 60 * 1000,
+  /** 缓存有效期（30 天，从 7 天延长） */
+  CACHE_TTL: 30 * 24 * 60 * 60 * 1000,
   /** 请求超时时间（3 秒） */
   REQUEST_TIMEOUT: 3000,
 }
+
+/**
+ * 全局请求缓存：防止同一域名的重复请求
+ * Key: domain, Value: Promise<string | null>
+ */
+const pendingRequests = new Map<string, Promise<string | null>>()
 
 /**
  * 获取域名
@@ -90,39 +96,59 @@ export function cacheFavicon(domain: string, url: string): void {
 }
 
 /**
- * 多源降级获取 Favicon
+ * 多源降级获取 Favicon（带全局去重）
  *
  * 策略：
- * 1. Google Favicon API
- * 2. DuckDuckGo Favicon API
- * 3. 网站根目录 favicon.ico
- * 4. 返回 null（使用默认图标）
+ * 1. 检查是否有正在进行的请求，如果有则复用
+ * 2. Google Favicon API
+ * 3. DuckDuckGo Favicon API
+ * 4. 网站根目录 favicon.ico
+ * 5. 返回 null（使用默认图标）
  *
  * @param domain - 域名
  * @returns 图标 URL 或 null
  */
 export async function fetchFavicon(domain: string): Promise<string | null> {
-  const sources = [
-    `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
-    `https://icons.duckduckgo.com/ip3/${domain}.ico`,
-    `https://${domain}/favicon.ico`,
-  ]
-
-  for (const source of sources) {
-    try {
-      const url = await fetchWithTimeout(source)
-      // 验证图片是否有效
-      const isValid = await validateImage(url)
-      if (isValid) {
-        return url
-      }
-    } catch {
-      // 继续尝试下一个源
-      continue
-    }
+  // 如果已经有正在进行的请求，直接返回该 Promise
+  if (pendingRequests.has(domain)) {
+    return pendingRequests.get(domain)!
   }
 
-  return null
+  // 创建新的请求 Promise
+  const requestPromise = (async () => {
+    const sources = [
+      `https://www.google.com/s2/favicons?domain=${domain}&sz=64`,
+      `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+      `https://${domain}/favicon.ico`,
+    ]
+
+    for (const source of sources) {
+      try {
+        const url = await fetchWithTimeout(source)
+        // 验证图片是否有效
+        const isValid = await validateImage(url)
+        if (isValid) {
+          return url
+        }
+      } catch {
+        // 继续尝试下一个源
+        continue
+      }
+    }
+
+    return null
+  })()
+
+  // 缓存正在进行的请求
+  pendingRequests.set(domain, requestPromise)
+
+  try {
+    const result = await requestPromise
+    return result
+  } finally {
+    // 请求完成后从缓存中移除
+    pendingRequests.delete(domain)
+  }
 }
 
 /**
@@ -172,9 +198,10 @@ function validateImage(url: string): Promise<boolean> {
 }
 
 /**
- * 获取 Favicon（带缓存）
+ * 获取 Favicon（带缓存和请求去重）
  *
  * 优先从缓存读取，缓存未命中时异步获取并缓存。
+ * 同一域名的请求会被去重，避免重复请求。
  *
  * @param url - 网站 URL
  * @param onSuccess - 获取成功回调
@@ -199,7 +226,7 @@ export function getFaviconWithCache(
     return cached
   }
 
-  // 2. 缓存未命中，异步获取
+  // 2. 缓存未命中，异步获取（带全局去重）
   fetchFavicon(domain).then((faviconUrl) => {
     if (faviconUrl) {
       cacheFavicon(domain, faviconUrl)

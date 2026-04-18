@@ -31,7 +31,7 @@
       </div>
 
       <el-table
-        :data="filteredTags"
+        :data="tagList"
         v-loading="loading"
         stripe
         style="width: 100%"
@@ -77,6 +77,20 @@
           </template>
         </el-table-column>
       </el-table>
+
+      <!-- 分页 -->
+      <div class="pagination-wrapper" v-if="total > pageSize">
+        <el-pagination
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
+          :total="total"
+          :page-sizes="[10, 20, 50, 100]"
+          layout="total, sizes, prev, pager, next, jumper"
+          background
+          @current-change="loadTags"
+          @size-change="handleSizeChange"
+        />
+      </div>
     </el-card>
 
     <!-- 创建/编辑对话框 -->
@@ -151,6 +165,11 @@ const currentTagId = ref<number | null>(null)
 const filterCategoryId = ref<number | null>(null)
 const formRef = ref<FormInstance>()
 
+// 分页状态
+const currentPage = ref(1)
+const pageSize = ref(20)
+const total = ref(0)
+
 const formData = ref({
   name: '',
   category_id: null as number | null
@@ -163,23 +182,29 @@ const formRules: FormRules = {
   ]
 }
 
-// 计算属性
-const filteredTags = computed(() => {
-  if (!filterCategoryId.value) return tagList.value
-  return tagList.value.filter(tag => tag.category_id === filterCategoryId.value)
-})
-
 // 方法
 const loadTags = async () => {
   loading.value = true
   try {
-    const res = await getAdminTags()
-    tagList.value = res
+    const res = await getAdminTags({
+      page: currentPage.value,
+      page_size: pageSize.value,
+      category_id: filterCategoryId.value
+    })
+    tagList.value = res.items
+    total.value = res.total
+    currentPage.value = res.page
+    pageSize.value = res.page_size
   } catch (error) {
     ElMessage.error('加载标签列表失败')
   } finally {
     loading.value = false
   }
+}
+
+const handleSizeChange = () => {
+  currentPage.value = 1
+  loadTags()
 }
 
 const loadCategories = async () => {
@@ -192,7 +217,8 @@ const loadCategories = async () => {
 }
 
 const handleFilterChange = () => {
-  // 筛选逻辑在 computed 中处理
+  currentPage.value = 1
+  loadTags()
 }
 
 const showCreateDialog = () => {
@@ -296,5 +322,11 @@ onMounted(() => {
 
 .filter-bar {
   margin-bottom: 20px;
+}
+
+.pagination-wrapper {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

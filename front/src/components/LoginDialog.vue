@@ -270,7 +270,7 @@ const handleLogin = async () => {
       console.log('用户信息:', userInfo)
 
       // 保存用户信息到 Store
-      userStore.setUserInfo(response.access_token, userInfo)
+      userStore.setUserInfoWithToken(response.access_token, userInfo)
 
       console.log('Token 已保存:', response.access_token)
       console.log('localStorage token:', localStorage.getItem('access_token'))

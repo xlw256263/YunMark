@@ -14,9 +14,19 @@ export const getBookmarks = (params?: {
   page_size?: number
   category_id?: number
   tag_ids?: number[]
-  title?: string  // 搜索关键词
+  title?: string
 }) => {
-  return request.get<BookmarkListResponse>('/bookmarks', { params })
+  console.log('[API调试] 请求参数:', params)
+  console.log('[API调试] tag_ids:', params?.tag_ids, '类型:', typeof params?.tag_ids)
+  
+  // 确保tag_ids是普通数组
+  const cleanParams = params ? {
+    ...params,
+    tag_ids: params.tag_ids ? [...params.tag_ids] : undefined
+  } : undefined
+  
+  console.log('[API调试] 清理后的参数:', cleanParams)
+  return request.get<BookmarkListResponse>('/bookmarks', { params: cleanParams })
 }
 
 /**
