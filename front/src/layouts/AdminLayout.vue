@@ -19,12 +19,12 @@
             <el-icon><PriceTag /></el-icon>
             <span>标签管理</span>
           </el-menu-item>
+          <el-menu-item index="/admin/shares">
+            <el-icon><DocumentChecked /></el-icon>
+            <span>分享审核</span>
+          </el-menu-item>
           <!-- 预留其他管理模块入口 -->
           <!--
-          <el-menu-item index="/admin/audit" disabled>
-            <el-icon><DocumentChecked /></el-icon>
-            <span>审核管理</span>
-          </el-menu-item>
           <el-menu-item index="/admin/blacklist" disabled>
             <el-icon><CircleClose /></el-icon>
             <span>黑名单管理</span>
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { FolderOpened, PriceTag } from '@element-plus/icons-vue'
+import { FolderOpened, PriceTag, DocumentChecked } from '@element-plus/icons-vue'
 
 const route = useRoute()
 

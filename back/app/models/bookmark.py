@@ -125,6 +125,9 @@ class Bookmark(Base):
     
     # 与 Tag 的多对多关系：一个书签可以有多个标签，通过 bookmark_tag 关联表实现
     tags = relationship("Tag", secondary=bookmark_tag, back_populates="bookmarks")
+    
+    # 与 BookmarkShare 的一对多关系：一个书签可以有多条分享记录
+    shares = relationship("BookmarkShare", back_populates="bookmark")
 
     def __repr__(self):
         """返回书签对象的字符串表示，便于调试和日志记录"""

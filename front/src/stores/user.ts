@@ -21,6 +21,7 @@ function isTokenExpired(token: string): boolean {
 export const useUserStore = defineStore('user', () => {
   const accessToken = ref(localStorage.getItem('access_token') || '')
   const userInfo = ref<User | null>(null)
+  const shouldShowLoginDialog = ref(false)
 
   const isLoggedIn = computed(() => !!accessToken.value)
   const username = computed(() => userInfo.value?.username || '')
@@ -81,6 +82,20 @@ export const useUserStore = defineStore('user', () => {
     localStorage.setItem('user', JSON.stringify(user))
   }
 
+  /**
+   * 触发显示登录弹窗
+   */
+  function triggerLoginDialog() {
+    shouldShowLoginDialog.value = true
+  }
+
+  /**
+   * 关闭登录弹窗
+   */
+  function closeLoginDialog() {
+    shouldShowLoginDialog.value = false
+  }
+
   return {
     accessToken,
     userInfo,
@@ -88,9 +103,12 @@ export const useUserStore = defineStore('user', () => {
     username,
     email,
     isAdmin,
+    shouldShowLoginDialog,
     setUserInfoWithToken,
     restoreFromStorage,
     logout,
     updateUserInfo,
+    triggerLoginDialog,
+    closeLoginDialog,
   }
 })

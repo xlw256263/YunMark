@@ -312,11 +312,13 @@ export interface StatsOverview {
   /** 收藏总数 */
   total_bookmarks: number
   /** 本周新增数量 */
-  new_this_period: number
+  new_this_week: number
   /** 总点击次数 */
   total_clicks: number
   /** 分类数量 */
-  category_count: number
+  total_categories: number
+  /** 标签数量 */
+  total_tags: number
 }
 
 /**
@@ -363,6 +365,60 @@ export interface HourlyDistribution {
   hour: number
   /** 点击次数 */
   count: number
+}
+
+/**
+ * 标签使用统计数据
+ */
+export interface TagUsageStat {
+  /** 标签名称 */
+  tag_name: string
+  /** 使用次数 */
+  usage_count: number
+}
+
+// ============ 分享相关类型 ============
+
+export type ShareStatus = 
+  | 'draft'        // 草稿
+  | 'pending'      // 待审核
+  | 'reviewing'    // 审核中
+  | 'approved'     // 已通过
+  | 'rejected'     // 已驳回
+  | 'cancelled'    // 已取消
+  | 'taken_down'   // 已下架
+
+export interface ShareRecord {
+  id: number
+  bookmark_id: number
+  user_id: number
+  status: ShareStatus
+  review_note?: string | null
+  reject_reason?: string | null
+  submitted_at?: string | null
+  reviewed_at?: string | null
+  reviewer_id?: number | null
+  created_at: string
+  updated_at: string
+  
+  // 嵌套的书签信息
+  bookmark_title?: string | null
+  bookmark_url?: string | null
+  bookmark_description?: string | null
+  bookmark_favicon?: string | null
+  
+  // 用户信息
+  username?: string | null
+  
+  // 审核人信息
+  reviewer_username?: string | null
+}
+
+export interface ShareListResponse {
+  total: number
+  page: number
+  page_size: number
+  items: ShareRecord[]
 }
 
 // ==================== 公开分享相关类型（待后端实现）====================

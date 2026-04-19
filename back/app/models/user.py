@@ -21,6 +21,7 @@ class User(Base):
 
     bookmarks = relationship("Bookmark", back_populates="user")
     categories = relationship("Category", back_populates="user")
+    shares = relationship("BookmarkShare", foreign_keys="BookmarkShare.user_id", back_populates="user")
 
     def __repr__(self):
         return f"<User(id={self.id}, username='{self.username}', email='{self.email}', role='{self.role}')>"

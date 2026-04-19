@@ -169,6 +169,16 @@
                   size="small"
                   plain
                   class="action-btn"
+                  @click="handleShare(bookmark)"
+                >
+                  <el-icon><Share /></el-icon>
+                  分享
+                </el-button>
+                <el-button
+                  type="success"
+                  size="small"
+                  plain
+                  class="action-btn"
                   @click="handleCopyUrl(bookmark)"
                 >
                   <el-icon><CopyDocument /></el-icon>
@@ -351,12 +361,13 @@
 import { ref, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
-  Search, Plus, Collection, Folder, More, Edit, Delete, View, Loading, CopyDocument, Link, ArrowRight,
+  Search, Plus, Collection, Folder, More, Edit, Delete, View, Loading, CopyDocument, Link, ArrowRight, Share,
   type FormInstance, type FormRules
 } from '@element-plus/icons-vue'
 import { useBookmarkStore } from '@/stores/bookmark'
 import { getTagCategories } from '@/api/category'
 import { updateCategory as updateCategoryApi, deleteCategory as deleteCategoryApi } from '@/api/category'
+import { createShare } from '@/api/share'
 import { getFaviconWithCache, getDomain, getCachedFavicon } from '@/utils/favicon'
 import type { Bookmark, BookmarkCreate, CategoryCreate, Tag, TagCategory } from '@/types'
 
@@ -646,6 +657,29 @@ const handleDelete = (bookmark: Bookmark) => {
       }
     })
     .catch(() => {})
+}
+
+// ==================== 分享书签 ====================
+const handleShare = async (bookmark: Bookmark) => {
+  try {
+    await ElMessageBox.confirm(
+      `确定要分享书签「${bookmark.title}」吗？分享后需等待管理员审核。`,
+      '确认分享',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'info',
+      }
+    )
+
+    await createShare(bookmark.id)
+    ElMessage.success('分享创建成功，请在"我的分享"中提交审核')
+  } catch (error: any) {
+    if (error !== 'cancel') {
+      const errorMsg = error.response?.data?.detail || '分享失败'
+      ElMessage.error(errorMsg)
+    }
+  }
 }
 
 // ==================== 添加分类 ====================

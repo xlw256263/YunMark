@@ -25,6 +25,10 @@
                   <el-icon><Collection /></el-icon>
                   我的收藏
                 </el-dropdown-item>
+                <el-dropdown-item command="shares">
+                  <el-icon><Share /></el-icon>
+                  我的分享
+                </el-dropdown-item>
                 <el-dropdown-item command="stats">
                   <el-icon><DataAnalysis /></el-icon>
                   数据统计
@@ -67,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
@@ -77,6 +81,7 @@ import {
   User,
   SwitchButton,
   Setting,
+  Share,
 } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import LoginDialog from '@/components/LoginDialog.vue'
@@ -85,6 +90,14 @@ const router = useRouter()
 const userStore = useUserStore()
 
 const loginDialogRef = ref<InstanceType<typeof LoginDialog>>()
+
+// 监听 store 中的登录弹窗触发状态
+watch(() => userStore.shouldShowLoginDialog, (shouldShow) => {
+  if (shouldShow) {
+    loginDialogRef.value?.open()
+    userStore.closeLoginDialog()
+  }
+})
 
 const userAvatar = computed(() => {
   const avatar = userStore.userInfo?.avatar
@@ -114,6 +127,9 @@ const handleCommand = (command: string) => {
   switch (command) {
     case 'bookmarks':
       router.push('/my/bookmarks')
+      break
+    case 'shares':
+      router.push('/my/shares')
       break
     case 'stats':
       router.push('/stats')
@@ -156,7 +172,6 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   background: #0f1923;
-  overflow: hidden;
 }
 
 .app-header {
@@ -218,7 +233,8 @@ onMounted(() => {
 
 .app-content {
   flex: 1;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>
 

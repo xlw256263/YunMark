@@ -509,6 +509,223 @@ class TagService:
         return TagResponse.from_orm(db_tag)
 
 
+class StatisticsService:
+    """统计服务类，提供数据分析和可视化所需的数据"""
+
+    @staticmethod
+    def get_user_overview(db: Session, user_id: int) -> dict:
+        """
+        获取用户数据概览
+        
+        Args:
+            db: 数据库会话对象
+            user_id: 用户ID
+            
+        Returns:
+            dict: 包含书签总数、分类数、标签数、总点击数等统计信息
+        """
+        from sqlalchemy import func
+        
+        # 书签总数
+        total_bookmarks = db.query(func.count(Bookmark.id)).filter(
+            Bookmark.user_id == user_id
+        ).scalar() or 0
+        
+        # 分类数量
+        total_categories = db.query(func.count(Category.id)).filter(
+            Category.user_id == user_id
+        ).scalar() or 0
+        
+        # 用户使用的标签数量（去重）
+        from app.models.bookmark import bookmark_tag
+        total_tags = db.query(func.count(func.distinct(bookmark_tag.c.tag_id))).join(
+            Bookmark, Bookmark.id == bookmark_tag.c.bookmark_id
+        ).filter(
+            Bookmark.user_id == user_id
+        ).scalar() or 0
+        
+        # 总点击次数
+        total_clicks = db.query(func.sum(Bookmark.click_count)).filter(
+            Bookmark.user_id == user_id
+        ).scalar() or 0
+        
+        # 本周新增书签数
+        from datetime import datetime, timedelta
+        week_ago = datetime.utcnow() - timedelta(days=7)
+        new_this_week = db.query(func.count(Bookmark.id)).filter(
+            Bookmark.user_id == user_id,
+            Bookmark.created_at >= week_ago
+        ).scalar() or 0
+        
+        return {
+            "total_bookmarks": total_bookmarks,
+            "total_categories": total_categories,
+            "total_tags": total_tags,
+            "total_clicks": total_clicks,
+            "new_this_week": new_this_week
+        }
+
+    @staticmethod
+    def get_category_distribution(db: Session, user_id: int) -> List[dict]:
+        """
+        获取分类分布数据（用于饼图）
+        
+        Args:
+            db: 数据库会话对象
+            user_id: 用户ID
+            
+        Returns:
+            List[dict]: 分类名称和数量的列表
+        """
+        from sqlalchemy import func
+        
+        # 查询每个分类的书签数量
+        results = db.query(
+            Category.name,
+            func.count(Bookmark.id).label('count')
+        ).join(
+            Bookmark, Bookmark.category_id == Category.id
+        ).filter(
+            Category.user_id == user_id
+        ).group_by(
+            Category.id, Category.name
+        ).order_by(
+            func.count(Bookmark.id).desc()
+        ).all()
+        
+        # 计算总数用于百分比
+        total = sum(row.count for row in results)
+        
+        return [
+            {
+                "category_name": row.name,
+                "count": row.count,
+                "percentage": round((row.count / total * 100), 2) if total > 0 else 0
+            }
+            for row in results
+        ]
+
+    @staticmethod
+    def get_top_bookmarks(db: Session, user_id: int, limit: int = 10) -> List[dict]:
+        """
+        获取热门书签（按点击次数排序）
+        
+        Args:
+            db: 数据库会话对象
+            user_id: 用户ID
+            limit: 返回数量限制
+            
+        Returns:
+            List[dict]: 热门书签列表
+        """
+        bookmarks = db.query(Bookmark).filter(
+            Bookmark.user_id == user_id
+        ).order_by(
+            Bookmark.click_count.desc()
+        ).limit(limit).all()
+        
+        return [
+            {
+                "id": b.id,
+                "title": b.title,
+                "url": b.url,
+                "click_count": b.click_count
+            }
+            for b in bookmarks
+        ]
+
+    @staticmethod
+    def get_creation_trend(db: Session, user_id: int, days: int = 30) -> List[dict]:
+        """
+        获取书签创建趋势（最近N天）
+        
+        Args:
+            db: 数据库会话对象
+            user_id: 用户ID
+            days: 天数
+            
+        Returns:
+            List[dict]: 每日创建数量
+        """
+        from datetime import datetime, timedelta
+        from sqlalchemy import func, cast, Date
+        
+        end_date = datetime.utcnow()
+        start_date = end_date - timedelta(days=days)
+        
+        # 查询每天的创建数量
+        results = db.query(
+            cast(Bookmark.created_at, Date).label('date'),
+            func.count(Bookmark.id).label('count')
+        ).filter(
+            Bookmark.user_id == user_id,
+            Bookmark.created_at >= start_date
+        ).group_by(
+            cast(Bookmark.created_at, Date)
+        ).order_by(
+            cast(Bookmark.created_at, Date)
+        ).all()
+        
+        # 转换为字典列表
+        trend_data = [
+            {
+                "date": row.date.strftime('%Y-%m-%d'),
+                "count": row.count
+            }
+            for row in results
+        ]
+        
+        # 补充缺失的日期（填充0）
+        date_set = {item['date'] for item in trend_data}
+        complete_data = []
+        for i in range(days):
+            date = (start_date + timedelta(days=i)).strftime('%Y-%m-%d')
+            if date in date_set:
+                item = next(item for item in trend_data if item['date'] == date)
+                complete_data.append(item)
+            else:
+                complete_data.append({"date": date, "count": 0})
+        
+        return complete_data
+
+    @staticmethod
+    def get_tag_usage_stats(db: Session, user_id: int, limit: int = 15) -> List[dict]:
+        """
+        获取标签使用统计（用于词云或柱状图）
+        
+        Args:
+            db: 数据库会话对象
+            user_id: 用户ID
+            limit: 返回数量限制
+            
+        Returns:
+            List[dict]: 标签使用次数统计
+        """
+        from app.models.bookmark import bookmark_tag
+        from sqlalchemy import func
+        
+        results = db.query(
+            Tag.name,
+            func.count(bookmark_tag.c.bookmark_id).label('usage_count')
+        ).join(
+            bookmark_tag, Tag.id == bookmark_tag.c.tag_id
+        ).join(
+            Bookmark, Bookmark.id == bookmark_tag.c.bookmark_id
+        ).filter(
+            Bookmark.user_id == user_id
+        ).group_by(
+            Tag.id, Tag.name
+        ).order_by(
+            func.count(bookmark_tag.c.bookmark_id).desc()
+        ).limit(limit).all()
+        
+        return [
+            {
+                "tag_name": row.name,
+                "usage_count": row.usage_count
+            }
+            for row in results
+        ]
 
 
 class AdminTagService:
