@@ -312,11 +312,13 @@ export interface StatsOverview {
   /** 收藏总数 */
   total_bookmarks: number
   /** 本周新增数量 */
-  new_this_period: number
+  new_this_week: number
   /** 总点击次数 */
   total_clicks: number
   /** 分类数量 */
-  category_count: number
+  total_categories: number
+  /** 标签数量 */
+  total_tags: number
 }
 
 /**
@@ -363,6 +365,16 @@ export interface HourlyDistribution {
   hour: number
   /** 点击次数 */
   count: number
+}
+
+/**
+ * 标签使用统计数据
+ */
+export interface TagUsageStat {
+  /** 标签名称 */
+  tag_name: string
+  /** 使用次数 */
+  usage_count: number
 }
 
 // ==================== 公开分享相关类型（待后端实现）====================

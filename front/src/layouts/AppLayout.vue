@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
@@ -85,6 +85,14 @@ const router = useRouter()
 const userStore = useUserStore()
 
 const loginDialogRef = ref<InstanceType<typeof LoginDialog>>()
+
+// 监听 store 中的登录弹窗触发状态
+watch(() => userStore.shouldShowLoginDialog, (shouldShow) => {
+  if (shouldShow) {
+    loginDialogRef.value?.open()
+    userStore.closeLoginDialog()
+  }
+})
 
 const userAvatar = computed(() => {
   const avatar = userStore.userInfo?.avatar
@@ -156,7 +164,6 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   background: #0f1923;
-  overflow: hidden;
 }
 
 .app-header {
@@ -218,7 +225,8 @@ onMounted(() => {
 
 .app-content {
   flex: 1;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 </style>
 

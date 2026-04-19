@@ -20,16 +20,6 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
-    // 登录页
-    path: '/login',
-    name: 'Login',
-    component: () => import('@/views/Login.vue'),
-    meta: { 
-      title: '登录',
-      requiresAuth: false,
-    },
-  },
-  {
     // 我的收藏页 - 需要登录
     path: '/my/bookmarks',
     name: 'Bookmarks',
@@ -152,11 +142,9 @@ router.beforeEach((to, from, next) => {
   
   // 检查是否需要登录
   if (to.meta.requiresAuth && !userStore.isLoggedIn) {
-    // 未登录，跳转到登录页，并记录目标路径以便登录后返回
-    next({
-      path: '/login',
-      query: { redirect: to.fullPath },
-    })
+    // 未登录，触发登录弹窗并跳转到首页
+    userStore.triggerLoginDialog()
+    next('/')
     return
   }
   
@@ -164,12 +152,6 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAdmin && !userStore.isAdmin) {
     // 非管理员，跳转到 403 页面
     next('/403')
-    return
-  }
-  
-  // 如果已登录且访问登录页，重定向到首页
-  if (to.path === '/login' && userStore.isLoggedIn) {
-    next('/')
     return
   }
   

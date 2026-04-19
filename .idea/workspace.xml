@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9b4244f8-85ca-4c4a-8a3c-4acbac49f6fb" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/back/app/api/v1/statistics.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/front/src/api/statistics.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/app/api/v1/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/api/v1/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/app/services/bookmark_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/services/bookmark_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/@element-plus_icons-vue.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/@element-plus_icons-vue.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/@element-plus_icons-vue.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/@element-plus_icons-vue.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/axios.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/axios.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/axios.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/axios.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/chunk-BGRZ6U3R.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/chunk-BGRZ6U3R.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/chunk-BGRZ6U3R.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/chunk-BGRZ6U3R.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/chunk-G3PMV62Z.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/chunk-G3PMV62Z.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/chunk-KBO5XXYD.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/chunk-KBO5XXYD.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/chunk-VID4RN2V.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/chunk-VID4RN2V.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/chunk-VID4RN2V.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/chunk-VID4RN2V.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/element-plus.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/element-plus.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/element-plus.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/element-plus.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/element-plus_dist_locale_zh-cn__mjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/element-plus_dist_locale_zh-cn__mjs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/element-plus_dist_locale_zh-cn__mjs.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/element-plus_dist_locale_zh-cn__mjs.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/pinia.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/pinia.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/pinia.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/pinia.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/vue-router.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/vue-router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/vue-router.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/vue-router.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/node_modules/.vite/deps/vue.js" beforeDir="false" afterPath="$PROJECT_DIR$/front/node_modules/.vite/deps/vue.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/layouts/AppLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/layouts/AppLayout.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/router/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/stores/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/stores/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/types/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/Login.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/StatsView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/StatsView.vue" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="3C2C9nb3fZqj3pVvNMLheXKbhiG" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "feature/user-profile",
+    "last_opened_file_path": "C:/Users/shumeng/Desktop/求职/2026/FastAPI_demo",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "terminal",
+    "ts.external.directory.path": "C:\\Users\\shumeng\\Desktop\\求职\\2026\\FastAPI_demo\\front\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.19072.16" />
+        <option value="bundled-python-sdk-8336bb23522e-2767605e8bc2-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.19072.16" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="9b4244f8-85ca-4c4a-8a3c-4acbac49f6fb" name="更改" comment="" />
+      <created>1775574128664</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1775574128664</updated>
+      <workItem from="1775574129766" duration="302000" />
+      <workItem from="1776597377511" duration="4120000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/back/app/api/v1/api.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
