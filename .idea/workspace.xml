@@ -5,28 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b4244f8-85ca-4c4a-8a3c-4acbac49f6fb" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/back/app/api/v1/admin_shares.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back/app/api/v1/public_shares.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back/app/api/v1/shares.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back/app/models/bookmark_share.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back/app/schemas/bookmark_share.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back/app/services/bookmark_share_service.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/back/migrations/add_bookmark_share_table.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/api/share.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/views/MySharesView.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front/src/views/admin/ShareAdminView.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/文档/开发问题/用户分享-管理员审核.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/back/app/models/official_share_snapshot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/back/migrations/1.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/back/migrations/create_official_share_snapshot_table.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/app/api/v1/api.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/api/v1/api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/app/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/back/app/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/models/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/models/bookmark.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/models/bookmark.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/back/app/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/models/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/app/models/bookmark_share.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/models/bookmark_share.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/app/schemas/bookmark_share.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/schemas/bookmark_share.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/app/services/bookmark_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/services/bookmark_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/app/services/bookmark_share_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/back/app/services/bookmark_share_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/back/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/back/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/front/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/api/admin.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/api/admin.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/api/request.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/api/request.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/layouts/AdminLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/layouts/AdminLayout.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/layouts/AppLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/layouts/AppLayout.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/router/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front/src/types/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/types/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/views/BookmarkView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/BookmarkView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/MySharesView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/MySharesView.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front/src/views/OfficialView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/OfficialView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/ProfileView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/ProfileView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/admin/TagAdminView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/admin/TagAdminView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/src/views/admin/TagCategoryAdminView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/front/src/views/admin/TagCategoryAdminView.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +82,8 @@
       <updated>1775574128664</updated>
       <workItem from="1775574129766" duration="302000" />
       <workItem from="1776597377511" duration="7891000" />
-      <workItem from="1776620150386" duration="376000" />
+      <workItem from="1776620150386" duration="577000" />
+      <workItem from="1776692146303" duration="10325000" />
     </task>
     <servers />
   </component>

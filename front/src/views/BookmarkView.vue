@@ -287,7 +287,7 @@
       </el-form>
       <template #footer>
         <el-button @click="bookmarkDialogVisible = false">取消</el-button>
-        <el-button type="primary" :loading="bookmarkStore.loading" @click="handleSaveBookmark">
+        <el-button type="primary" :loading="bookmarkStore.loading" @click.prevent="handleSaveBookmark">
           保存
         </el-button>
       </template>
@@ -498,7 +498,12 @@ const fetchBookmarks = async () => {
 
 // ==================== 点击书签跳转 ====================
 const handleBookmarkClick = (bookmark: Bookmark) => {
-  window.open(bookmark.url, '_blank')
+  // 确保 URL 是完整格式
+  let url = bookmark.url
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = 'https://' + url
+  }
+  window.open(url, '_blank')
   bookmarkStore.incrementClickCount(bookmark.id)
 }
 
@@ -607,6 +612,9 @@ const handleSaveBookmark = async () => {
   await bookmarkFormRef.value.validate(async (valid) => {
     if (!valid) return
 
+    // 防止重复提交
+    if (bookmarkStore.loading) return
+
     try {
       const tagOnlyIds = bookmarkForm.value.tag_ids?.filter(id =>
         !String(id).startsWith('cat_')
@@ -628,6 +636,7 @@ const handleSaveBookmark = async () => {
       fetchBookmarks()
     } catch (error: any) {
       console.error('保存失败:', error)
+      // 错误提示已由响应拦截器统一处理，这里只记录日志
     }
   })
 }
@@ -654,6 +663,7 @@ const handleDelete = (bookmark: Bookmark) => {
         fetchBookmarks()
       } catch (error: any) {
         console.error('删除失败:', error)
+        // 错误提示已由响应拦截器统一处理
       }
     })
     .catch(() => {})
@@ -676,8 +686,8 @@ const handleShare = async (bookmark: Bookmark) => {
     ElMessage.success('分享创建成功，请在"我的分享"中提交审核')
   } catch (error: any) {
     if (error !== 'cancel') {
-      const errorMsg = error.response?.data?.detail || '分享失败'
-      ElMessage.error(errorMsg)
+      console.error('分享失败:', error)
+      // 错误提示已由响应拦截器统一处理
     }
   }
 }
@@ -713,6 +723,7 @@ const handleSaveCategory = async () => {
       categoryDialogVisible.value = false
     } catch (error: any) {
       console.error('创建分类失败:', error)
+      // 错误提示已由响应拦截器统一处理
     }
   })
 }
@@ -756,6 +767,7 @@ const handleUpdateCategory = async () => {
       await bookmarkStore.fetchCategories()
     } catch (error: any) {
       console.error('更新分类失败:', error)
+      // 错误提示已由响应拦截器统一处理
     }
   })
 }
@@ -786,6 +798,7 @@ const handleDeleteCategory = (category: any) => {
         fetchBookmarks()
       } catch (error: any) {
         console.error('删除分类失败:', error)
+        // 错误提示已由响应拦截器统一处理
       }
     })
     .catch(() => {})

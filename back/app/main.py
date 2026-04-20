@@ -6,6 +6,11 @@ from pathlib import Path
 from app.config import settings
 from app.db.database import init_db
 from app.api.v1 import api_router
+from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+
 
 
 def create_application() -> FastAPI:

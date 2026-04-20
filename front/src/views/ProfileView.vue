@@ -207,7 +207,8 @@ const handleSaveBasic = async () => {
       ElMessage.success('保存成功')
       editBasicVisible.value = false
     } catch (error: any) {
-      ElMessage.error(error.response?.data?.detail || '保存失败')
+      console.error('保存失败:', error)
+      // 错误提示已由响应拦截器统一处理
     } finally {
       saving.value = false
     }
@@ -228,7 +229,8 @@ const handleAvatarChange = async (file: UploadFile) => {
     userStore.updateUserInfo(updatedUser)
     ElMessage.success('头像上传成功')
   } catch (error: any) {
-    ElMessage.error(error.response?.data?.detail || '头像上传失败')
+    console.error('头像上传失败:', error)
+    // 错误提示已由响应拦截器统一处理
   } finally {
     saving.value = false
   }
@@ -247,7 +249,8 @@ const handleChangePassword = async () => {
       userStore.logout()
       setTimeout(() => { window.location.href = '/' }, 1500)
     } catch (error: any) {
-      ElMessage.error(error.response?.data?.detail || '密码修改失败')
+      console.error('密码修改失败:', error)
+      // 错误提示已由响应拦截器统一处理
     } finally {
       changingPassword.value = false
     }
@@ -261,7 +264,8 @@ const handleDeleteAccount = async () => {
     userStore.logout()
     setTimeout(() => { window.location.href = '/' }, 1500)
   } catch (error: any) {
-    ElMessage.error('注销失败')
+    console.error('注销失败:', error)
+    // 错误提示已由响应拦截器统一处理
   }
 }
 

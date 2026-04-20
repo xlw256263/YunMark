@@ -4,6 +4,7 @@
  */
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { ElMessage } from 'element-plus'
 
 /**
  * 路由配置数组
@@ -109,6 +110,16 @@ const routes: RouteRecordRaw[] = [
           requiresAdmin: true,
         },
       },
+      {
+        // 黑名单管理
+        path: 'blacklist',
+        name: 'AdminBlacklist',
+        component: () => import('@/views/admin/BlacklistAdminView.vue'),
+        meta: { 
+          title: '黑名单管理',
+          requiresAdmin: true,
+        },
+      },
     ],
   },
   {
@@ -170,8 +181,9 @@ router.beforeEach((to, from, next) => {
   
   // 检查是否需要管理员权限
   if (to.meta.requiresAdmin && !userStore.isAdmin) {
-    // 非管理员，跳转到 403 页面
-    next('/403')
+    // 非管理员，显示错误提示并阻止导航
+    ElMessage.error('需要管理员权限才能访问此页面')
+    next(false)  // 阻止导航，停留在当前页面
     return
   }
   

@@ -2,6 +2,18 @@
 import request from './request'
 import type { Tag, TagCreate, TagCategory, TagCategoryCreate, TagCategoryUpdate } from '@/types'
 
+export interface BlacklistItem {
+  id: number
+  pattern: string
+  description?: string | null
+  created_at: string
+}
+
+export interface BlacklistCreate {
+  pattern: string
+  description?: string
+}
+
 /**
  * 管理员 API 模块
  */
@@ -85,4 +97,27 @@ export function updateAdminTagCategory(categoryId: number, data: TagCategoryUpda
  */
 export function deleteAdminTagCategory(categoryId: number) {
   return request.delete(`/admin/tag-categories/${categoryId}`)
+}
+
+// ============ 黑名单管理 ============
+
+/**
+ * 获取黑名单列表
+ */
+export function getBlacklist() {
+  return request.get<BlacklistItem[]>('/admin/blacklist')
+}
+
+/**
+ * 添加黑名单
+ */
+export function createBlacklist(data: BlacklistCreate) {
+  return request.post<BlacklistItem>('/admin/blacklist', data)
+}
+
+/**
+ * 删除黑名单
+ */
+export function deleteBlacklist(id: number) {
+  return request.delete(`/admin/blacklist/${id}`)
 }

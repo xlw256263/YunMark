@@ -111,6 +111,19 @@ class BookmarkShareService:
                 detail=f"Cannot submit share with status: {share.status.value}"
             )
 
+        # 黑名单校验：检查书签 URL 是否在黑名单中
+        from app.models.blacklist import Blacklist
+
+        bookmark = share.bookmark
+        if bookmark:
+            blacklist_items = db.query(Blacklist).all()
+            for item in blacklist_items:
+                if item.pattern.lower() in bookmark.url.lower():
+                    raise HTTPException(
+                        status_code=status.HTTP_403_FORBIDDEN,
+                        detail=f"该书签 URL 被系统限制：{item.pattern}。{item.description or '无法分享此链接'}"
+                    )
+
         # 更新状态为待审核
         share.status = ShareStatus.PENDING
         share.submitted_at = datetime.utcnow()
@@ -371,6 +384,43 @@ class BookmarkShareService:
         share.reviewed_at = datetime.utcnow()
         share.reviewer_id = admin_user.id
 
+        # 如果审核通过，创建官方快照
+        if review_data.status == ShareStatus.APPROVED:
+            from app.models.official_share_snapshot import OfficialShareSnapshot
+            
+            bookmark = share.bookmark
+            user = share.user
+            
+            # 构建书签快照（只保留公开信息）
+            bookmark_snapshot = {
+                "id": bookmark.id,
+                "title": bookmark.title,
+                "url": bookmark.url,
+                "description": bookmark.description,
+                "favicon": bookmark.favicon,
+                "click_count": bookmark.click_count
+            }
+            
+            # 构建用户快照（脱敏处理，不暴露敏感信息）
+            user_snapshot = {
+                "username": user.username,
+                "avatar_url": user.avatar
+            } if user else None
+            
+            # 创建快照记录
+            snapshot = OfficialShareSnapshot(
+                share_id=share.id,
+                bookmark_snapshot=bookmark_snapshot,
+                user_snapshot=user_snapshot,
+                curated_at=datetime.utcnow(),
+                curator_id=admin_user.id,
+                featured_level=0,  # 默认为普通级别
+                sort_weight=0,
+                is_visible=1
+            )
+            
+            db.add(snapshot)
+
         db.commit()
         db.refresh(share)
 
@@ -429,55 +479,69 @@ class BookmarkShareService:
             sort: str = "latest"
     ) -> dict:
         """
-        获取已通过的公开分享列表（用于官方分享页面）
+        获取已通过的公开分享列表（从快照表读取）
 
         Args:
             db: 数据库会话
             page: 页码
             page_size: 每页数量
-            sort: 排序方式（latest/popular）
+            sort: 排序方式（latest/popular/featured）
 
         Returns:
             分页的分享列表
         """
-        query = db.query(BookmarkShare).filter(
-            BookmarkShare.status == ShareStatus.APPROVED
+        from app.models.official_share_snapshot import OfficialShareSnapshot
+        
+        # 从快照表查询可见的记录
+        query = db.query(OfficialShareSnapshot).filter(
+            OfficialShareSnapshot.is_visible == 1
         )
 
         # 排序
         if sort == "popular":
-            # 按书签点击量排序
-            query = query.join(Bookmark).order_by(desc(Bookmark.click_count))
+            # 按书签点击量排序（从快照中提取）
+            # 注意：MySQL JSON 字段排序需要使用 func.json_extract
+            from sqlalchemy import func
+            query = query.order_by(
+                desc(func.json_extract(OfficialShareSnapshot.bookmark_snapshot, '$.click_count'))
+            )
+        elif sort == "featured":
+            # 按推荐等级和权重排序
+            query = query.order_by(
+                desc(OfficialShareSnapshot.featured_level),
+                desc(OfficialShareSnapshot.sort_weight),
+                desc(OfficialShareSnapshot.curated_at)
+            )
         else:
-            # 默认按审核时间排序（最新通过的在前）
-            query = query.order_by(desc(BookmarkShare.reviewed_at))
+            # 默认按收录时间排序（最新通过的在前）
+            query = query.order_by(desc(OfficialShareSnapshot.curated_at))
 
         total = query.count()
 
-        shares = query.offset((page - 1) * page_size).limit(page_size).all()
+        snapshots = query.offset((page - 1) * page_size).limit(page_size).all()
 
         items = []
-        for share in shares:
-            bookmark = share.bookmark
-            user = share.user
-
+        for snapshot in snapshots:
+            bookmark_data = snapshot.bookmark_snapshot
+            user_data = snapshot.user_snapshot
+            
             item = BookmarkShareResponse(
-                id=share.id,
-                bookmark_id=share.bookmark_id,
-                user_id=share.user_id,
-                status=share.status,
-                review_note=share.review_note,
-                reject_reason=share.reject_reason,
-                submitted_at=share.submitted_at,
-                reviewed_at=share.reviewed_at,
-                reviewer_id=share.reviewer_id,
-                created_at=share.created_at,
-                updated_at=share.updated_at,
-                bookmark_title=bookmark.title if bookmark else None,
-                bookmark_url=bookmark.url if bookmark else None,
-                bookmark_description=bookmark.description if bookmark else None,
-                bookmark_favicon=bookmark.favicon if bookmark else None,
-                username=user.username if user else None,
+                id=snapshot.id,
+                bookmark_id=bookmark_data.get("id"),
+                user_id=None,  # 快照中不暴露真实用户ID
+                status=ShareStatus.APPROVED,
+                review_note=None,
+                reject_reason=None,
+                submitted_at=None,
+                reviewed_at=snapshot.curated_at,
+                reviewer_id=None,
+                created_at=snapshot.created_at,
+                updated_at=snapshot.updated_at,
+                bookmark_title=bookmark_data.get("title"),
+                bookmark_url=bookmark_data.get("url"),
+                bookmark_description=bookmark_data.get("description"),
+                bookmark_favicon=bookmark_data.get("favicon"),
+                username=user_data.get("username") if user_data else "匿名用户",
                 reviewer_username=None
             )
             items.append(item)
