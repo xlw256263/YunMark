@@ -124,9 +124,19 @@ request.interceptors.response.use(
         break
         
       case 403:
-        // 禁止访问：权限不足
-        router.push('/403')
-        ElMessage.error('无权访问该资源')
+        // 禁止访问：显示后端返回的具体错误信息，不跳转页面
+        // 注意：如果是路由守卫已经处理过的权限问题，这里不再重复提示
+        const path403 = router.currentRoute.value.path
+        const adminPaths = ['/admin']
+        const isAdminPath = adminPaths.some(path => path403.startsWith(path))
+        
+        // 如果是在管理员路径下且用户不是管理员，说明路由守卫已经处理过了，跳过
+        if (isAdminPath) {
+          break
+        }
+        
+        const detail = (data as any)?.detail || '无权访问该资源'
+        ElMessage.error(detail)
         break
         
       case 404:
@@ -136,12 +146,18 @@ request.interceptors.response.use(
         
       case 409:
         // 数据冲突（如用户名/邮箱已存在）
-        // 不在这里处理，让组件自己显示错误信息
+        ElMessage.error((data as any)?.detail || '数据冲突，操作失败')
         break
         
       case 422:
         // 参数校验失败
-        // 不在这里处理，让组件自己显示错误信息
+        const validationErrors = (data as any)?.detail
+        if (Array.isArray(validationErrors) && validationErrors.length > 0) {
+          // Pydantic 验证错误，显示第一个错误信息
+          ElMessage.error(validationErrors[0].msg || '参数校验失败')
+        } else {
+          ElMessage.error((data as any)?.detail || '参数校验失败')
+        }
         break
         
       case 500:
@@ -150,10 +166,9 @@ request.interceptors.response.use(
         break
         
       default:
-        // 其他错误：只在非 401/409/422 时显示通用错误
-        if (status !== 401 && status !== 409 && status !== 422) {
-          ElMessage.error((data as any)?.detail || '网络异常，请稍后重试')
-        }
+        // 其他错误：显示后端返回的具体错误信息
+        const errorMsg = (data as any)?.detail || `请求失败 (${status || '未知错误'})`
+        ElMessage.error(errorMsg)
     }
 
     return Promise.reject(error)

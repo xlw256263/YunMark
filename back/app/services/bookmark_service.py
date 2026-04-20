@@ -128,7 +128,9 @@ class BookmarkService:
 
         Raises:
             NotFoundError: 如果指定的分类ID存在但不属于当前用户
+            HTTPException: 如果 URL 匹配黑名单
         """
+
         # 验证分类是否存在且属于当前用户（如果提供了category_id）
         if bookmark_data.category_id:
             category = db.query(Category).filter(
@@ -160,10 +162,10 @@ class BookmarkService:
         # 刷新对象以获取数据库生成的默认值（如ID, created_at等）
         db.refresh(db_bookmark)
 
-        # 更新标签使用计数
+        # 异步更新标签使用计数
         if bookmark_data.tag_ids:
-            AdminTagService.update_tag_usage_count_on_bookmark_create(db, bookmark_data.tag_ids)
-            db.refresh(db_bookmark)
+            from app.services.tasks import update_tag_usage_task
+            update_tag_usage_task.delay('create', {'tag_ids': bookmark_data.tag_ids})
 
         return BookmarkResponse.from_orm(db_bookmark)
 
@@ -225,10 +227,10 @@ class BookmarkService:
         db.commit()
         db.refresh(bookmark)
 
-        # 更新标签使用计数
+        # 异步更新标签使用计数
         if tag_ids is not None:
-            AdminTagService.update_tag_usage_count_on_bookmark_update(db, old_tag_ids, tag_ids)
-            db.refresh(bookmark)
+            from app.services.tasks import update_tag_usage_task
+            update_tag_usage_task.delay('update', {'old_tag_ids': old_tag_ids, 'new_tag_ids': tag_ids})
 
         return BookmarkResponse.from_orm(bookmark)
 
@@ -254,13 +256,15 @@ class BookmarkService:
         # 保存标签ID列表（用于更新计数）
         tag_ids = [tag.id for tag in bookmark.tags]
         
+        # 先删除关联的分享记录（避免外键约束错误）
+        from app.models.bookmark_share import BookmarkShare
+        db.query(BookmarkShare).filter(
+            BookmarkShare.bookmark_id == bookmark_id
+        ).delete(synchronize_session=False)
+        
         # 执行删除操作
         db.delete(bookmark)
         db.commit()
-        
-        # 更新标签使用计数
-        if tag_ids:
-            AdminTagService.update_tag_usage_count_on_bookmark_delete(db, tag_ids)
         
         return True
 

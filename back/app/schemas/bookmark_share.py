@@ -66,7 +66,7 @@ class BookmarkShareResponse(BaseModel):
     """分享记录响应模型"""
     id: int
     bookmark_id: int
-    user_id: int
+    user_id: Optional[int] = None  # 改为可选字段
     status: ShareStatusEnum
     review_note: Optional[str] = None
     reject_reason: Optional[str] = None
@@ -90,27 +90,6 @@ class BookmarkShareResponse(BaseModel):
 
     class Config:
         from_attributes = True
-        json_schema_extra = {
-            "example": {
-                "id": 1,
-                "bookmark_id": 10,
-                "user_id": 5,
-                "status": "approved",
-                "review_note": "优质内容",
-                "reject_reason": None,
-                "submitted_at": "2026-04-20T10:00:00",
-                "reviewed_at": "2026-04-20T15:30:00",
-                "reviewer_id": 1,
-                "created_at": "2026-04-20T09:00:00",
-                "updated_at": "2026-04-20T15:30:00",
-                "bookmark_title": "FastAPI 官方文档",
-                "bookmark_url": "https://fastapi.tiangolo.com",
-                "bookmark_description": "高性能 Web 框架",
-                "bookmark_favicon": "https://fastapi.tiangolo.com/img/favicon.png",
-                "username": "xiaoming",
-                "reviewer_username": "admin"
-            }
-        }
 
 
 class BookmarkShareListResponse(BaseModel):

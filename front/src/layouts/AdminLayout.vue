@@ -23,17 +23,10 @@
             <el-icon><DocumentChecked /></el-icon>
             <span>分享审核</span>
           </el-menu-item>
-          <!-- 预留其他管理模块入口 -->
-          <!--
-          <el-menu-item index="/admin/blacklist" disabled>
+          <el-menu-item index="/admin/blacklist">
             <el-icon><CircleClose /></el-icon>
             <span>黑名单管理</span>
           </el-menu-item>
-          <el-menu-item index="/admin/stats" disabled>
-            <el-icon><DataAnalysis /></el-icon>
-            <span>系统统计</span>
-          </el-menu-item>
-          -->
         </el-menu>
       </el-aside>
 
@@ -48,7 +41,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { FolderOpened, PriceTag, DocumentChecked } from '@element-plus/icons-vue'
+import { FolderOpened, PriceTag, DocumentChecked, CircleClose } from '@element-plus/icons-vue'
 
 const route = useRoute()
 

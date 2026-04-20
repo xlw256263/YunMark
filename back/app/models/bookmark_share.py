@@ -28,8 +28,8 @@ class BookmarkShare(Base):
     # 主键 ID
     id = Column(Integer, primary_key=True, index=True, autoincrement=True, comment='分享记录ID')
     
-    # 关联的书签ID
-    bookmark_id = Column(Integer, ForeignKey('bookmarks.id'), nullable=False, index=True, comment='书签ID')
+    # 关联的书签ID（级联删除）
+    bookmark_id = Column(Integer, ForeignKey('bookmarks.id', ondelete='CASCADE'), nullable=False, index=True, comment='书签ID')
     
     # 分享用户ID（冗余字段，便于快速查询）
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True, comment='分享用户ID')

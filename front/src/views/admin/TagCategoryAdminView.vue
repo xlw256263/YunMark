@@ -187,7 +187,8 @@ const handleSubmit = async () => {
       dialogVisible.value = false
       await loadCategories()
     } catch (error: any) {
-      ElMessage.error(error.response?.data?.detail || '操作失败')
+      console.error('操作失败:', error)
+      // 错误提示已由响应拦截器统一处理
     } finally {
       submitting.value = false
     }
@@ -211,7 +212,8 @@ const handleDelete = async (category: TagCategory) => {
     await loadCategories()
   } catch (error: any) {
     if (error !== 'cancel') {
-      ElMessage.error(error.response?.data?.detail || '删除失败')
+      console.error('删除失败:', error)
+      // 错误提示已由响应拦截器统一处理
     }
   }
 }

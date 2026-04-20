@@ -248,8 +248,9 @@ const loadShares = async () => {
     })
     shares.value = res.items
     total.value = res.total
-  } catch (error) {
-    ElMessage.error('加载分享列表失败')
+  } catch (error: any) {
+    console.error('加载分享列表失败:', error)
+    // 错误提示已由响应拦截器统一处理
   } finally {
     loading.value = false
   }
@@ -275,7 +276,8 @@ const handleSubmit = async (share: ShareRecord) => {
     loadShares()
   } catch (error: any) {
     if (error !== 'cancel') {
-      ElMessage.error('提交失败')
+      console.error('提交失败:', error)
+      // 错误提示已由响应拦截器统一处理
     }
   }
 }
@@ -294,7 +296,8 @@ const handleCancel = async (share: ShareRecord) => {
     loadShares()
   } catch (error: any) {
     if (error !== 'cancel') {
-      ElMessage.error('取消失败')
+      console.error('取消失败:', error)
+      // 错误提示已由响应拦截器统一处理
     }
   }
 }
@@ -313,7 +316,8 @@ const handleResubmit = async (share: ShareRecord) => {
     loadShares()
   } catch (error: any) {
     if (error !== 'cancel') {
-      ElMessage.error('提交失败')
+      console.error('重新提交失败:', error)
+      // 错误提示已由响应拦截器统一处理
     }
   }
 }
